@@ -1,14 +1,39 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+
+require("dotenv").config();
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req, res) => {
-    res.send('Welcome to my online shop')
+mongoose.connect(
+  "mongodb+srv://Phuc:PhucTLCN2023@cluster0.qeoyr.mongodb.net/eptShop",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
+app.get("/", (req, res) => {
+  res.send("Welcome to my online shop");
+});
+
+const userSchema = {
+  email: String,
+  password: String,
+};
+
+const user = mongoose.model("user", userSchema);
+
+app.post("/", (req, res) => {
+  const newUser = new user({
+    email: "abc@gmail.com",
+    password: "123456",
+  });
+  newUser.save();
 });
 
 const port = process.env.PORT || 5000;
