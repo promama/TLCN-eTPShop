@@ -1,0 +1,17 @@
+.nav-bar {
+    height: 70px;
+    background: lightblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4rem;
+}
+
+.nav-bar h2 {
+    font-size: 40px;
+}
+
+.nav-bag {
+    display: flex;
+    align-items: center;
+}
