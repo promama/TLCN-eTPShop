@@ -1,0 +1,9 @@
+.products {
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product {
+    display: flex;
+}
