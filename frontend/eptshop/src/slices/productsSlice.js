@@ -34,6 +34,20 @@ export const allProductsFetch = createAsyncThunk(
   }
 );
 
+export const productFetch = createAsyncThunk(
+  "products/productFetch",
+  async (productId) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/product/findProduct/${productId.id}`
+      );
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -47,6 +61,10 @@ const productsSlice = createSlice({
     builder.addCase(allProductsFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.items = action.payload.products;
+    });
+    builder.addCase(productFetch.fulfilled, (state, action) => {
+      state.status = "success";
+      state.items = action.payload.product[0];
     });
   },
 });
