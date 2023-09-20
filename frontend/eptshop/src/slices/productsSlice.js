@@ -4,6 +4,7 @@ import axios from "axios";
 
 const initialState = {
   items: [],
+  singleItem: {},
   status: "nah",
   backend: 0,
 };
@@ -64,7 +65,7 @@ const productsSlice = createSlice({
     });
     builder.addCase(productFetch.fulfilled, (state, action) => {
       state.status = "success";
-      state.items = action.payload.product[0];
+      state.singleItem = action.payload.product[0];
     });
   },
 });

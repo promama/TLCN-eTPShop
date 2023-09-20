@@ -10,11 +10,16 @@ const NavBar = () => {
       <Link to="/">
         <h2>eTPShop</h2>
       </Link>
-      <Link to="/cart">
-        <div className="nav-bag">
-          <ShoppingBagIcon />
-        </div>
-      </Link>
+      <div className="login-bag">
+        <Link to="/cart">
+          <div className="nav-bag">
+            <ShoppingBagIcon />
+          </div>
+        </Link>
+        <Link to="/login">
+          <h1>Login</h1>
+        </Link>
+      </div>
     </nav>
   );
 };
