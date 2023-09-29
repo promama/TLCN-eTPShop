@@ -1,10 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import "./NavBar.css";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const NavBar = () => {
-  const name = useSelector((state) => state.user.name);
+  const email = useSelector((state) => state.user.email);
+
+  function hi() {
+    if (email !== "" && email !== null) {
+      return email;
+    } else {
+      return (
+        <Link to="/login">
+          <h1>Login</h1>
+        </Link>
+      );
+    }
+  }
+
   return (
     <nav className="nav-bar">
       <Link to="/">
@@ -16,9 +30,7 @@ const NavBar = () => {
             <ShoppingBagIcon />
           </div>
         </Link>
-        <Link to="/login">
-          <h1>Login</h1>
-        </Link>
+        {hi()}
       </div>
     </nav>
   );

@@ -15,15 +15,6 @@ function Home() {
     dispatch(allProductsFetch());
   }, [dispatch]);
 
-  // const [item, setItem] = useState(0);
-
-  // async function handleClick() {
-  //   const result = await dispatch(productsFetch()).then(
-  //     console.log("dispatch complete")
-  //   );
-  //   setItem(result.payload.data);
-  // }
-
   function navigateProductDetail(id) {
     console.log(id);
     navigate(`/product/${id}`);
