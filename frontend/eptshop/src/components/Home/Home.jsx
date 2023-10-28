@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
+import { Card, Col, Row } from "react-bootstrap";
+import { formatCurrency } from "../../utilities/formatCurrency";
+
 function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,26 +25,42 @@ function Home() {
 
   return (
     <>
-      home page
-      <div className="products">
-        {products.map((product) => (
-          <div
-            className="product"
-            key={product.name}
-            onClick={() => navigateProductDetail(product._id)}
-          >
-            <img
-              src={product.url}
-              alt={product.name}
-              className="product-image"
-            ></img>
-            <div>Name: {product.name}</div>
-            <div className="price-sold">
-              <div>Price: ${product.price}</div>
-              <div>Remain: {product.remain}</div>
-            </div>
-          </div>
-        ))}
+      <h1>home page</h1>
+      <div>
+        <Row md={2} xs={1} lg={3} className="g-3">
+          {products.map((product) => (
+            <Col
+              key={product.name}
+              onClick={() => navigateProductDetail(product._id)}
+            >
+              {/* <img
+                src={product.url}
+                alt={product.name}
+                className="products-image"
+              ></img>
+              <div>Name: {product.name}</div>
+              <div className="price-sold">
+                <div>Price: ${product.price}</div>
+              </div> */}
+              <Card className="h-100">
+                <Card.Img
+                  variant="top"
+                  src={product.url}
+                  height="200px"
+                  style={{ objectFit: "cover" }}
+                />
+                <Card.Body className="d-flex flex-column">
+                  <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
+                    <span className="fs-2">{product.name}</span>
+                    <span className="ms-2 text-muted">
+                      {formatCurrency(product.price)}
+                    </span>
+                  </Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </div>
     </>
   );

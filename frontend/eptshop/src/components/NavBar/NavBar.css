@@ -15,9 +15,19 @@
     display: flex;
     align-items: center;
     padding-right: 20px;
+    width: 3rem;
+    height: 3rem;
+    position: relative;
 }
 
 .login-bag {
     display: flex;
+    align-items: center;
+}
+
+.bag-number {
+    background-color: red;
+    border-radius: 50%;
+    justify-content: center;
     align-items: center;
 }

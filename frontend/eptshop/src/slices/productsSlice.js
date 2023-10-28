@@ -1,4 +1,3 @@
-import { SatelliteAlt } from "@mui/icons-material";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -7,7 +6,24 @@ const initialState = {
   singleItem: {},
   status: "nah",
   backend: 0,
+  item_Props: [],
+  color: "",
+  size: "",
 };
+
+export const productColorFetch = createAsyncThunk(
+  "products/productColorFetch",
+  async (productId) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/product/findColor/${productId.id}`
+      );
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
 
 //test dispatch data from back end
 export const productsFetch = createAsyncThunk(
@@ -52,7 +68,16 @@ export const productFetch = createAsyncThunk(
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    changeSize: (state, action) => {
+      state.size = action.payload;
+      localStorage.setItem("size", action.payload);
+    },
+    changeColor: (state, action) => {
+      state.color = action.payload;
+      localStorage.setItem("color", action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(productsFetch.fulfilled, (state, action) => {
       state.items.push(action.payload);
@@ -66,8 +91,15 @@ const productsSlice = createSlice({
     builder.addCase(productFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.singleItem = action.payload.product[0];
+      state.color = action.payload.color;
+    });
+    builder.addCase(productColorFetch.fulfilled, (state, action) => {
+      state.status = "success";
+      state.item_Props = action.payload.color;
     });
   },
 });
+
+export const { changeSize, changeColor } = productsSlice.actions;
 
 export default productsSlice.reducer;
