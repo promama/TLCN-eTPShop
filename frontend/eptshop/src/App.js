@@ -2,23 +2,23 @@ import "./App.css";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Home from "./components/Home/Home";
+import Home from "./pages/Home/Home";
 import Cart from "./components/Cart/Cart";
 import NavBar from "./components/NavBar/NavBar";
-import Login from "./components/Login/Login";
-import Product from "./components/Product/Product";
-import SignUp from "./components/Signup/Signup";
-import NavbarMui from "./components/NavBar/NavBarMui";
+import Login from "./pages/Login/Login";
+import Product from "./pages/Product/Product";
+import SignUp from "./pages/Signup/Signup";
 
 import { Container } from "react-bootstrap";
+import { ShoppingCart } from "./components/ShoppingCart/ShoppingCart";
 
 function App() {
   return (
     <>
       <Container className="mb-4">
         <BrowserRouter>
+          <ShoppingCart />
           <NavBar />
-          {/* <NavbarMui></NavbarMui> */}
           <Routes>
             <Route path="/" Component={Home}></Route>
             <Route path="/cart" Component={Cart}></Route>

@@ -16,6 +16,8 @@ import { useDispatch } from "react-redux";
 import { fetchLogin } from "../../slices/userSlice";
 import { useNavigate } from "react-router-dom";
 
+import { cartListItem } from "../../slices/cartSlice";
+
 function Copyright(props) {
   return (
     <Typography
@@ -39,6 +41,7 @@ const defaultTheme = createTheme();
 export default function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -54,8 +57,12 @@ export default function SignIn() {
         })
       ).unwrap();
       alert(res.message);
-      localStorage.setItem("access_token", JSON.stringify(res.token));
-      localStorage.setItem("email", JSON.stringify(res.email));
+      localStorage.setItem("access_token", res.token);
+      localStorage.setItem("refresh_token", res.refreshToken);
+      localStorage.setItem("email", res.email);
+      console.log(res.cart);
+      //cart
+      dispatch(cartListItem(res.cart));
       navigate("/");
     } catch (err) {
       console.log(err);

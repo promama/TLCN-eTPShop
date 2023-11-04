@@ -1,39 +1,57 @@
 import { Link, NavLink, useParams } from "react-router-dom";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import "./NavBar.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Nav, Navbar as NavbarBs } from "react-bootstrap";
 import { useEffect } from "react";
+import { removeEmail } from "../../slices/userSlice";
+import { showOffCanvas, dropCart } from "../../slices/cartSlice";
 
 const NavBar = () => {
-  const email = useSelector((state) => state.user.email);
+  const dispatch = useDispatch();
+
+  let email =
+    useSelector((state) => state.user.email) || localStorage.getItem("email");
+
+  const totalCartProducts = useSelector(
+    (state) => state.cart.cartTotalQuantities
+  );
+
+  useEffect(() => {}, [email]);
 
   function userDropDown() {
     if (email === "" || email === null) {
       return (
-        <Link to="/login">
+        <Link to="/login" style={{ marginRight: "1%" }}>
           <h1>Signin</h1>
         </Link>
       );
     }
     return (
-      <div class="dropdown">
+      <div className="dropdown" style={{ marginRight: "1%" }}>
         <button
-          class="btn btn-secondary dropdown-toggle"
+          className="btn btn-secondary dropdown-toggle"
           type="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
           {email}
         </button>
-        <ul class="dropdown-menu">
+        <ul className="dropdown-menu">
           <li>
             <div className="dropdown-item" style={{ cursor: "pointer" }}>
               Profile
             </div>
           </li>
           <li>
-            <div className="dropdown-item" style={{ cursor: "pointer" }}>
+            <div
+              className="dropdown-item"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                dispatch(removeEmail());
+                dispatch(dropCart());
+              }}
+            >
               Sign out
             </div>
           </li>
@@ -54,6 +72,7 @@ const NavBar = () => {
           style={{ width: "3rem", height: "3rem", position: "relative" }}
           variant="outline-primary"
           className="rounded-circle"
+          onClick={() => dispatch(showOffCanvas())}
         >
           <ShoppingBagIcon />
           <div
@@ -68,7 +87,8 @@ const NavBar = () => {
               transform: "translate(25%, 25%)",
             }}
           >
-            3
+            {/* {isTooLarge(totalCartProducts) ? "9+" : { totalCartProducts }} */}
+            {totalCartProducts}
           </div>
         </Button>
       </Container>

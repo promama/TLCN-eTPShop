@@ -5,6 +5,7 @@ const initialState = {
   email: "",
   status: "idle",
   token: "",
+  refresh_token: "",
   message: "",
 };
 
@@ -41,7 +42,17 @@ export const fetchSignUp = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    removeEmail: (state, action) => {
+      state.email = "";
+      state.token = "";
+      state.message = "";
+      state.status = "idle";
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("email");
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchSignUp.fulfilled, (state, action) => {
       state.status = "success";
@@ -56,6 +67,7 @@ const userSlice = createSlice({
       state.message = "login success!";
       state.token = action.payload.token;
       state.email = action.payload.email;
+      state.refresh_token = action.payload.refreshToken;
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {
       state.status = "fail";
@@ -63,5 +75,7 @@ const userSlice = createSlice({
     });
   },
 });
+
+export const { removeEmail } = userSlice.actions;
 
 export default userSlice.reducer;

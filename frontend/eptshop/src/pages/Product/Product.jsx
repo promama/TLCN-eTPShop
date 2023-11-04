@@ -1,27 +1,32 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./Product.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { productFetch, productColorFetch } from "../../slices/productsSlice";
+import { addToCartFetch } from "../../slices/cartSlice";
 import Box from "@mui/system/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { changeSize, changeColor } from "../../slices/productsSlice";
+import { removeEmail } from "../../slices/userSlice";
 import { formatCurrency } from "../../utilities/formatCurrency";
 
 function Product() {
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const product = useSelector((state) => state.products.singleItem);
   const baseColor = useSelector((state) => state.products.color);
   const productColors = useSelector((state) => state.products.item_Props);
   const size = useSelector((state) => state.products.size);
   const color = useSelector((state) => state.products.color);
+
   const [choosenColor, setChoosenColor] = useState(
     localStorage.getItem("color") || color
   );
   const [mainImage, setMainImage] = useState("");
-  const [sizes, setSizes] = useState(localStorage.getItem("size").toString());
+  const [sizes, setSizes] = useState(size);
 
   const [num, setNum] = useState(1);
 
@@ -74,13 +79,36 @@ function Product() {
     for (let index = 0; index < sizes.length; index++) {
       sizesList.push(sizes[index].productSize);
     }
-    console.log(sizesList);
     return sizesList.map((size) => (
       <option value={size} key={size.toString()}>
         {size}
       </option>
     ));
   }
+
+  const addToCart = async (event) => {
+    event.preventDefault();
+    try {
+      await dispatch(
+        addToCartFetch({
+          productId: params,
+          color: choosenColor,
+          size: sizes,
+          quantity: num,
+        })
+      ).unwrap();
+    } catch (err) {
+      if (err.message === "signin again") {
+        console.log(err.message);
+        //request login again
+        dispatch(removeEmail());
+        navigate("/login");
+        //set previous link before navigate to login
+        //so that we can login and go back
+      }
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     dispatch(productFetch(params));
@@ -95,6 +123,8 @@ function Product() {
     setChoosenColor(baseColor);
     localStorage.setItem("color", choosenColor);
   }, [baseColor, choosenColor]);
+
+  useEffect(() => {}, [size]);
   return (
     <>
       <Box>
@@ -119,6 +149,7 @@ function Product() {
                           <div className="col">
                             <img
                               className="card-img-top mb-5"
+                              style={{ cursor: "pointer" }}
                               src={product.url}
                               alt="..."
                               onClick={() => {
@@ -129,6 +160,7 @@ function Product() {
                           <div className="col">
                             <img
                               className="card-img-top mb-5"
+                              style={{ cursor: "pointer" }}
                               src={product.url1}
                               alt="..."
                               onClick={() => {
@@ -139,6 +171,7 @@ function Product() {
                           <div className="col">
                             <img
                               className="card-img-top mb-5"
+                              style={{ cursor: "pointer" }}
                               src={product.url2}
                               alt="..."
                               onClick={() => {
@@ -149,6 +182,7 @@ function Product() {
                           <div className="col">
                             <img
                               className="card-img-top mb-5"
+                              style={{ cursor: "pointer" }}
                               src={product.url3}
                               alt="..."
                               onClick={() => {
@@ -182,6 +216,7 @@ function Product() {
                         onClick={() => {
                           setChoosenColor(color.productColor);
                           dispatch(changeColor(color.productColor));
+                          setSizes();
                           setMainImage(color.url);
                         }}
                       ></Box>
@@ -193,15 +228,17 @@ function Product() {
                       className="form-select"
                       aria-label="Choose size"
                       onChange={handleBoxChange}
-                      defaultValue={sizes}
                     >
-                      {productColors.map((products) =>
-                        isMatchColor(products.productColor) ? (
-                          showSizes(products.sizes)
-                        ) : (
-                          <></>
-                        )
-                      )}
+                      {productColors.map((products) => {
+                        if (isMatchColor(products.productColor)) {
+                          return (
+                            <>
+                              <option>Choose Sizes</option>
+                              {showSizes(products.sizes)}
+                            </>
+                          );
+                        }
+                      })}
                     </select>
                   </div>
                   <div className="mt-3">
@@ -246,13 +283,7 @@ function Product() {
                           <Button
                             className="mt-3"
                             variant="outlined"
-                            onClick={() => {
-                              console.log({
-                                color: choosenColor,
-                                size: sizes,
-                                quantity: num,
-                              });
-                            }}
+                            onClick={addToCart}
                           >
                             Add to Cart
                           </Button>

@@ -16,7 +16,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { fetchSignUp } from "../../slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { accordionClasses } from "@mui/material";
 
 function Copyright(props) {
   return (
