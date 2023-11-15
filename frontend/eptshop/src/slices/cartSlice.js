@@ -12,6 +12,26 @@ const initialState = {
   showOffCanvas: false,
 };
 
+export const subtractToCartFetch = createAsyncThunk(
+  "cart/subtractToCartFetch",
+  async (productInfos, { rejectWithValue }) => {
+    try {
+      const refresh_token = localStorage.getItem("refresh_token");
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        method: "POST",
+        url: `http://localhost:5000/cart/subtractToCart`,
+        data: { ...productInfos, refresh_token },
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const addToCartFetch = createAsyncThunk(
   "cart/addToCartFetch",
   async (productInfos, { rejectWithValue }) => {
@@ -59,11 +79,22 @@ const cartSlice = createSlice({
     builder.addCase(addToCartFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.message = "add to cart successfully";
-      state.cartItems = action.payload.cart.products;
-      state.cartTotalAmount = action.payload.cart.total;
-      state.cartTotalQuantities = action.payload.cart.quantity;
+      state.cartItems = action.payload.cart;
+      state.cartTotalAmount = action.payload.total;
+      state.cartTotalQuantities = action.payload.quantity;
     });
     builder.addCase(addToCartFetch.rejected, (state, action) => {
+      state.status = "fail";
+      state.message = action.payload.message;
+    });
+    builder.addCase(subtractToCartFetch.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = "subtract to cart successfully";
+      state.cartItems = action.payload.cart;
+      state.cartTotalAmount = action.payload.total;
+      state.cartTotalQuantities = action.payload.quantity;
+    });
+    builder.addCase(subtractToCartFetch.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
     });

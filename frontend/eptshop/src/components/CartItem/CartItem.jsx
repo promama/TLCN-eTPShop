@@ -2,7 +2,7 @@ import { Button, Stack } from "react-bootstrap";
 import { formatCurrency } from "../../utilities/formatCurrency";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { addToCartFetch } from "../../slices/cartSlice";
+import { addToCartFetch, subtractToCartFetch } from "../../slices/cartSlice";
 
 export function CartItem(props) {
   const dispatch = useDispatch();
@@ -10,10 +10,32 @@ export function CartItem(props) {
   function addMoreToCart() {
     dispatch(
       addToCartFetch({
-        productId: { id: props._id },
+        productId: { id: props.productId },
         color: props.color,
         size: props.size,
         quantity: 1,
+      })
+    );
+  }
+
+  function subtractLessToCart() {
+    dispatch(
+      subtractToCartFetch({
+        productId: { id: props.productId },
+        color: props.color,
+        size: props.size,
+        quantity: 1,
+      })
+    );
+  }
+
+  function removeToCart() {
+    dispatch(
+      subtractToCartFetch({
+        productId: { id: props.productId },
+        color: props.color,
+        size: props.size,
+        quantity: props.quantity,
       })
     );
   }
@@ -26,7 +48,7 @@ export function CartItem(props) {
       />
       <div className="me-auto">
         <div>
-          {props.name}{" "}
+          {props.productName}{" "}
           <span className="text-muted" style={{ fontSize: ".85rem" }}>
             x{props.quantity}
           </span>
@@ -56,6 +78,7 @@ export function CartItem(props) {
         variant="outline-primary"
         size="sm"
         style={{ width: "30px", height: "30px" }}
+        onClick={subtractLessToCart}
       >
         -
       </Button>
@@ -71,6 +94,7 @@ export function CartItem(props) {
         variant="outline-danger"
         size="sm"
         style={{ width: "30px", height: "30px" }}
+        onClick={removeToCart}
       >
         &times;
       </Button>

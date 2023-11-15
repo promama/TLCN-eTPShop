@@ -19,6 +19,7 @@ function Product() {
   const product = useSelector((state) => state.products.singleItem);
   const baseColor = useSelector((state) => state.products.color);
   const productColors = useSelector((state) => state.products.item_Props);
+  const productSizes = useSelector((state) => state.products.productSizes);
   const size = useSelector((state) => state.products.size);
   const color = useSelector((state) => state.products.color);
 
@@ -229,12 +230,17 @@ function Product() {
                       aria-label="Choose size"
                       onChange={handleBoxChange}
                     >
-                      {productColors.map((products) => {
+                      <option>Choose Sizes</option>
+                      {productSizes.map((products) => {
                         if (isMatchColor(products.productColor)) {
                           return (
                             <>
-                              <option>Choose Sizes</option>
-                              {showSizes(products.sizes)}
+                              <option
+                                value={products.productSize}
+                                key={products.productSize.toString()}
+                              >
+                                {products.productSize}
+                              </option>
                             </>
                           );
                         }

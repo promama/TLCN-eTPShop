@@ -9,6 +9,7 @@ const initialState = {
   item_Props: [],
   color: "",
   size: "",
+  productSizes: [],
 };
 
 export const productColorFetch = createAsyncThunk(
@@ -96,6 +97,7 @@ const productsSlice = createSlice({
     builder.addCase(productColorFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.item_Props = action.payload.color;
+      state.productSizes = action.payload.size;
     });
   },
 });

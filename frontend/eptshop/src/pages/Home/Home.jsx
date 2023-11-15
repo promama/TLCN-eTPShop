@@ -28,20 +28,11 @@ function Home() {
       <h1>home page</h1>
       <div>
         <Row md={2} xs={1} lg={3} className="g-3">
-          {products.map((product) => (
+          {products?.map((product) => (
             <Col
               key={product.name}
               onClick={() => navigateProductDetail(product._id)}
             >
-              {/* <img
-                src={product.url}
-                alt={product.name}
-                className="products-image"
-              ></img>
-              <div>Name: {product.name}</div>
-              <div className="price-sold">
-                <div>Price: ${product.price}</div>
-              </div> */}
               <Card className="h-100">
                 <Card.Img
                   variant="top"

@@ -6,7 +6,7 @@ import Home from "./pages/Home/Home";
 import Cart from "./components/Cart/Cart";
 import NavBar from "./components/NavBar/NavBar";
 import Login from "./pages/Login/Login";
-import Product from "./pages/Product/Product";
+import MyProduct from "./pages/MyProduct/MyProduct";
 import SignUp from "./pages/Signup/Signup";
 
 import { Container } from "react-bootstrap";
@@ -22,7 +22,7 @@ function App() {
           <Routes>
             <Route path="/" Component={Home}></Route>
             <Route path="/cart" Component={Cart}></Route>
-            <Route path="/product/:id" Component={Product}></Route>
+            <Route path="/product/:id" Component={MyProduct}></Route>
             <Route path="/login" Component={Login}></Route>
             <Route path="/signup" Component={SignUp}></Route>
           </Routes>

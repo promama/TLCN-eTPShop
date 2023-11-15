@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Offcanvas, Stack } from "react-bootstrap";
+import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { hideOffCanvas } from "../../slices/cartSlice";
 import { formatCurrency } from "../../utilities/formatCurrency";
@@ -39,6 +39,9 @@ export function ShoppingCart() {
           <div className="ms-auto fw-bold fs-5">
             Total: {formatCurrency(amount)}
           </div>
+          <Button variant="outline-primary" className="ms-auto fw-bold fs-5">
+            Confirm & buy
+          </Button>
         </Stack>
       </Offcanvas.Body>
     </Offcanvas>
