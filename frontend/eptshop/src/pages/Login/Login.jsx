@@ -62,7 +62,7 @@ export default function SignIn() {
       localStorage.setItem("email", res.email);
       console.log(res.cart);
       //cart
-      dispatch(cartListItem(res.cart));
+      dispatch(cartListItem({ cart: res.cart, products: res.products }));
       navigate("/");
     } catch (err) {
       console.log(err);

@@ -1,4 +1,4 @@
-import { Link, NavLink, useParams } from "react-router-dom";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import "./NavBar.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import { showOffCanvas, dropCart } from "../../slices/cartSlice";
 
 const NavBar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   let email =
     useSelector((state) => state.user.email) || localStorage.getItem("email");
@@ -18,6 +19,10 @@ const NavBar = () => {
   );
 
   useEffect(() => {}, [email]);
+
+  function navigateToProfilePage() {
+    navigate("/profile");
+  }
 
   function userDropDown() {
     if (email === "" || email === null) {
@@ -39,7 +44,11 @@ const NavBar = () => {
         </button>
         <ul className="dropdown-menu">
           <li>
-            <div className="dropdown-item" style={{ cursor: "pointer" }}>
+            <div
+              className="dropdown-item"
+              style={{ cursor: "pointer" }}
+              onClick={navigateToProfilePage}
+            >
               Profile
             </div>
           </li>
