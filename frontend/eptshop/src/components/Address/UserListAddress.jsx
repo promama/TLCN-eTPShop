@@ -16,7 +16,6 @@ function UserListAddress(props) {
 
   const [addNewAddress, setAddNewAddress] = useState(true);
 
-  //not navigate when token expire
   useEffect(() => {
     try {
       dispatch(fetchGetAllAddress());
@@ -29,25 +28,30 @@ function UserListAddress(props) {
     }
   }, [dispatch, navigate, message]);
 
-  useEffect(() => {}, [addresses]);
-
-  function isDefault(value) {
-    return !value;
-  }
+  useEffect(() => {
+    try {
+      dispatch(fetchGetAllAddress());
+    } catch (err) {
+      if (err.message === "signin again") {
+        navigate("/login");
+      }
+    }
+  }, [dispatch, navigate]);
 
   return (
     <>
-      {addresses?.map((address) => (
-        <UserSingleAddress
-          name={address.name}
-          phoneNumber={address.phoneNumber}
-          address={address.address}
-          isEdit={!addNewAddress}
-          isDefault={address.isDefault}
-          id={address._id}
-          key={address._id}
-        />
-      ))}
+      {addresses &&
+        addresses?.map((address) => (
+          <UserSingleAddress
+            name={address.name}
+            phoneNumber={address.phoneNumber}
+            address={address.address}
+            isEdit={!addNewAddress}
+            isDefault={address.isDefault}
+            id={address._id}
+            key={address._id}
+          />
+        ))}
     </>
   );
 }

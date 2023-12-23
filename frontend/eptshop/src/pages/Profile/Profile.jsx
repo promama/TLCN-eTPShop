@@ -72,15 +72,15 @@ function Profile() {
             </Row>
             <Row
               className="gx-4 gx-lg-5 align-items-center menu-item"
-              onClick={() => setShowComponent(4)}
+              onClick={() => setShowComponent(5)}
             >
-              Delivering
+              Waiting Approve
             </Row>
             <Row
               className="gx-4 gx-lg-5 align-items-center menu-item"
-              onClick={() => setShowComponent(5)}
+              onClick={() => setShowComponent(4)}
             >
-              Waiting Payment
+              Delivering
             </Row>
             <Row
               className="gx-4 gx-lg-5 align-items-center menu-item"

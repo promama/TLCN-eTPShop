@@ -4,7 +4,7 @@ import "./NavBar.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Nav, Navbar as NavbarBs } from "react-bootstrap";
 import { useEffect } from "react";
-import { removeEmail } from "../../slices/userSlice";
+import { removeEmail, reset } from "../../slices/userSlice";
 import { showOffCanvas, dropCart } from "../../slices/cartSlice";
 
 const NavBar = () => {
@@ -23,6 +23,8 @@ const NavBar = () => {
   function navigateToProfilePage() {
     navigate("/profile");
   }
+
+  useEffect(() => {}, [totalCartProducts]);
 
   function userDropDown() {
     if (email === "" || email === null) {
@@ -57,8 +59,9 @@ const NavBar = () => {
               className="dropdown-item"
               style={{ cursor: "pointer" }}
               onClick={() => {
-                dispatch(removeEmail());
+                dispatch(reset());
                 dispatch(dropCart());
+                navigate("/login");
               }}
             >
               Sign out

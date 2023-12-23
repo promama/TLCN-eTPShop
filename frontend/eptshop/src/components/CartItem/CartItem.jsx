@@ -1,11 +1,16 @@
 import { Button, Stack } from "react-bootstrap";
 import { formatCurrency } from "../../utilities/formatCurrency";
 import { Box } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCartFetch, subtractToCartFetch } from "../../slices/cartSlice";
+import { removeEmail, reset } from "../../slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export function CartItem(props) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const message = useSelector((state) => state.cart.message);
 
   function addMoreToCart() {
     dispatch(
@@ -39,6 +44,7 @@ export function CartItem(props) {
       })
     );
   }
+
   return (
     <Stack direction="horizontal" gap={2} className="d-flex align-items-center">
       <img

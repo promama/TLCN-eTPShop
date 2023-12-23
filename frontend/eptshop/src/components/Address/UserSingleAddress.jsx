@@ -47,7 +47,9 @@ function UserSingleAddress(props) {
       buttons: [
         {
           label: "Yes",
-          onClick: () => dispatch(fetchUserSetDefaultAddress(props.id)),
+          onClick: async () => {
+            dispatch(fetchUserSetDefaultAddress(props.id));
+          },
         },
         {
           label: "No",

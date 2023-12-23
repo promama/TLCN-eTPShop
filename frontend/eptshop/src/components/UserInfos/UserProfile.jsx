@@ -116,7 +116,7 @@ function UserProfile() {
                     fullWidth
                     name="phone"
                     label="Phone Number"
-                    type="number"
+                    type="tel"
                     id={phoneNumber.toString()}
                     autoComplete="phone"
                     sx={{ marginBottom: 2 }}

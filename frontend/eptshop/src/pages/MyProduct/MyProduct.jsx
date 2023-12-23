@@ -217,7 +217,7 @@ function Product() {
                         onClick={() => {
                           setChoosenColor(color.productColor);
                           dispatch(changeColor(color.productColor));
-                          setSizes();
+                          // setSizes();
                           setMainImage(color.url);
                         }}
                       ></Box>
