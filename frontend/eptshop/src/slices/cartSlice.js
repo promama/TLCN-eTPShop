@@ -18,14 +18,13 @@ export const showCartItemsFetch = createAsyncThunk(
   "cart/showCartItems",
   async (productInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/cart/getCartItems`,
-        data: { ...productInfos, refresh_token },
+        data: { ...productInfos },
       });
       return res.data;
     } catch (err) {
@@ -38,14 +37,13 @@ export const subtractToCartFetch = createAsyncThunk(
   "cart/subtractToCartFetch",
   async (productInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/cart/subtractToCart`,
-        data: { ...productInfos, refresh_token },
+        data: { ...productInfos },
       });
       return res.data;
     } catch (err) {
@@ -58,14 +56,13 @@ export const addToCartFetch = createAsyncThunk(
   "cart/addToCartFetch",
   async (productInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/cart/addToCart`,
-        data: { ...productInfos, refresh_token },
+        data: { ...productInfos },
       });
       return res.data;
     } catch (err) {
@@ -78,14 +75,13 @@ export const showAllOrder = createAsyncThunk(
   "cart/showAllOrder",
   async (productInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/cart/allOrder`,
-        data: { ...productInfos, refresh_token },
+        data: { ...productInfos },
       });
       return res.data;
     } catch (err) {
@@ -98,14 +94,13 @@ export const showWaitingApproveOrder = createAsyncThunk(
   "cart/showWaitingApproveOrder",
   async (productInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/cart/waitingApproveOrder`,
-        data: { ...productInfos, refresh_token },
+        data: { ...productInfos },
       });
       return res.data;
     } catch (err) {
@@ -118,14 +113,13 @@ export const showDeliveringOrder = createAsyncThunk(
   "cart/showDeliveringOrder",
   async (productInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/cart/deliveringOrder`,
-        data: { ...productInfos, refresh_token },
+        data: { ...productInfos },
       });
       return res.data;
     } catch (err) {
@@ -138,14 +132,13 @@ export const showFinishOrder = createAsyncThunk(
   "cart/showFinishOrder",
   async (productInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/cart/finishOrder`,
-        data: { ...productInfos, refresh_token },
+        data: { ...productInfos },
       });
       return res.data;
     } catch (err) {

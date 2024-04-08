@@ -5,7 +5,6 @@ const initialState = {
   email: localStorage.getItem("email") || "",
   status: "idle",
   token: localStorage.getItem("access_token") || "",
-  refresh_token: localStorage.getItem("refresh_token") || "",
   message: "",
   phoneNumber: "",
   gender: "",
@@ -18,14 +17,12 @@ export const fetchVerify = createAsyncThunk(
   "user/fetchVerify",
   async (numb, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/user/verify`,
-        data: { refresh_token },
       });
       return res.data;
     } catch (err) {
@@ -38,14 +35,12 @@ export const fetchUserSetDefaultAddress = createAsyncThunk(
   "user/fetchUserSetDefaultAddress",
   async (addressId, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/user/setUserDefaultAddress/${addressId}`,
-        data: { refresh_token },
       });
       return res.data;
     } catch (err) {
@@ -58,14 +53,12 @@ export const fetchUserDeleteAddress = createAsyncThunk(
   "user/fetchUserDeleteAddress",
   async (addressId, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "DELETE",
         url: `http://localhost:5000/user/deleteUserAddressById/${addressId}`,
-        data: { refresh_token },
       });
       return res.data;
     } catch (err) {
@@ -78,14 +71,12 @@ export const fetchUserShortProfile = createAsyncThunk(
   "user/fetchUserShortProfile",
   async (blank, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "GET",
         url: `http://localhost:5000/user/showUserShortProfile`,
-        data: { refresh_token },
       });
       return res.data;
     } catch (err) {
@@ -98,14 +89,13 @@ export const fetchChangeUserProfile = createAsyncThunk(
   "user/fetchChangeUserProfile",
   async (userProfile, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/user/editUserProfile`,
-        data: { refresh_token, ...userProfile },
+        data: { ...userProfile },
       });
       return res.data;
     } catch (err) {
@@ -118,14 +108,12 @@ export const fetchGetAllAddress = createAsyncThunk(
   "user/fetchGetAllAddress",
   async (numb, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/user/getAllAddress`,
-        data: { refresh_token },
       });
       return res.data;
     } catch (err) {
@@ -138,14 +126,13 @@ export const fetchAddNewAddress = createAsyncThunk(
   "user/fetchAddNewAddress",
   async (userInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
         url: `http://localhost:5000/user/createNewAddress`,
-        data: { ...userInfos, refresh_token },
+        data: { ...userInfos },
       });
       return res.data;
     } catch (err) {
@@ -158,14 +145,13 @@ export const fetchAddress = createAsyncThunk(
   "user/fetchAddress",
   async (userInfos, { rejectWithValue }) => {
     try {
-      const refresh_token = localStorage.getItem("refresh_token");
       const res = await axios.request({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "GET",
         url: `http://localhost:5000/user/getAllAddress`,
-        data: { ...userInfos, refresh_token },
+        data: { ...userInfos },
       });
       return res.data;
     } catch (err) {
@@ -212,7 +198,6 @@ const userSlice = createSlice({
       state.email = "";
       state.status = "idle";
       state.token = "";
-      state.refresh_token = "";
       state.message = "";
       state.phoneNumber = 0;
       state.gender = "";
@@ -248,7 +233,6 @@ const userSlice = createSlice({
       state.phoneNumber = action.payload.phoneNumber;
       state.gender = action.payload.gender;
       state.dob = action.payload.birthDay;
-      state.refresh_token = action.payload.refreshToken;
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {
       state.status = "fail";

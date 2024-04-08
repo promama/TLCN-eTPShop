@@ -58,7 +58,6 @@ export default function SignIn() {
       ).unwrap();
       alert(res.message);
       localStorage.setItem("access_token", res.token);
-      localStorage.setItem("refresh_token", res.refreshToken);
       localStorage.setItem("email", res.email);
       console.log(res.cart);
       //cart
