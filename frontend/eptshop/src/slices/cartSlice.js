@@ -182,6 +182,8 @@ const cartSlice = createSlice({
       state.cartTotalQuantities = action.payload.quantity;
       state.orderId = action.payload.orderId;
       localStorage.setItem("orderId", action.payload.orderId);
+      if (action.payload.token)
+        localStorage.setItem("access_token", action.payload.token);
     });
     builder.addCase(addToCartFetch.rejected, (state, action) => {
       state.status = "fail";

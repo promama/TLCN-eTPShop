@@ -28,7 +28,6 @@ function Product() {
   );
   const [mainImage, setMainImage] = useState("");
   const [sizes, setSizes] = useState(size);
-
   const [num, setNum] = useState(1);
 
   function displayMainImage(url) {

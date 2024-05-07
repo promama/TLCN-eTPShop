@@ -117,7 +117,7 @@ function UserProfile() {
                     name="phone"
                     label="Phone Number"
                     type="tel"
-                    id={phoneNumber.toString()}
+                    id={phoneNumber}
                     autoComplete="phone"
                     sx={{ marginBottom: 2 }}
                     defaultValue={phoneNumber}
