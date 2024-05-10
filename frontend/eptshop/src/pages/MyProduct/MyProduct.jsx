@@ -99,12 +99,9 @@ function Product() {
       ).unwrap();
     } catch (err) {
       if (err.message === "signin again") {
-        console.log(err.message);
-        //request login again
         dispatch(removeEmail());
+        alert(err.message);
         navigate("/login");
-        //set previous link before navigate to login
-        //so that we can login and go back
       }
       console.log(err);
     }

@@ -1,10 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { hideOffCanvas, showCartItemsFetch } from "../../slices/cartSlice";
+import {
+  dropCart,
+  hideOffCanvas,
+  showCartItemsFetch,
+} from "../../slices/cartSlice";
 import { formatCurrency } from "../../utilities/formatCurrency";
 import CartItem from "../CartItem/CartItem";
 import { useNavigate } from "react-router-dom";
+import { fetchConfirmAndBuy, removeEmail } from "../../slices/userSlice";
 
 export function ShoppingCart() {
   const dispatch = useDispatch();
@@ -30,6 +35,21 @@ export function ShoppingCart() {
     }
   }, [dispatch, navigate]);
 
+  const handleConfirmAndBuy = async (e) => {
+    try {
+      const res = await dispatch(fetchConfirmAndBuy(orderId)).unwrap();
+      alert(res.message);
+      dispatch(dropCart());
+    } catch (err) {
+      if (err.message === "signin again") {
+        dispatch(removeEmail());
+        alert(err.message);
+        navigate("/login");
+      }
+      console.log(err);
+    }
+  };
+
   return (
     <Offcanvas
       show={isShow}
@@ -42,17 +62,18 @@ export function ShoppingCart() {
       </Offcanvas.Header>
       <Offcanvas.Body>
         <Stack gap={3}>
-          {haveCartItems(cartItem) ? (
+          {haveCartItems(cartItem) &&
             cartItem.map((item) => (
               <CartItem key={item._id + item.color + item.size} {...item} />
-            ))
-          ) : (
-            <></>
-          )}
+            ))}
           <div className="ms-auto fw-bold fs-5">
             Total: {formatCurrency(amount)}
           </div>
-          <Button variant="outline-primary" className="ms-auto fw-bold fs-5">
+          <Button
+            variant="outline-primary"
+            className="ms-auto fw-bold fs-5"
+            onClick={handleConfirmAndBuy}
+          >
             Confirm & buy
           </Button>
         </Stack>

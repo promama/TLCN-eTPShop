@@ -190,6 +190,25 @@ export const fetchSignUp = createAsyncThunk(
   }
 );
 
+export const fetchConfirmAndBuy = createAsyncThunk(
+  "user/fetchConfirmAndBuy",
+  async (OrderId, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        method: "POST",
+        url: `http://localhost:5000/user/confirmOder`,
+        data: { OrderId },
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -336,6 +355,17 @@ const userSlice = createSlice({
       state.status = "fail";
       state.message = action.payload.message;
       state.allowAccess = action.payload.success;
+    });
+    //confirm oder
+    builder.addCase(fetchConfirmAndBuy.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = action.payload.message;
+      state.token = action.payload.token;
+      localStorage.setItem("access_token", action.payload.token);
+    });
+    builder.addCase(fetchConfirmAndBuy.rejected, (state, action) => {
+      state.status = "fail";
+      state.message = action.payload.message;
     });
   },
 });
