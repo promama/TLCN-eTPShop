@@ -23,7 +23,7 @@ function UserCartAwaitPayment() {
   return (
     <Card>
       <Card.Header className="bg-transparent mt-2">
-        Waiting approve Orders
+        Waiting Approve Orders
       </Card.Header>
       <Card.Body>
         {listOrders &&

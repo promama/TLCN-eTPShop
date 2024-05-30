@@ -13,7 +13,6 @@ const NavBar = () => {
 
   let email =
     useSelector((state) => state.user.email) || localStorage.getItem("email");
-
   const totalCartProducts = useSelector(
     (state) => state.cart.cartTotalQuantities
   );

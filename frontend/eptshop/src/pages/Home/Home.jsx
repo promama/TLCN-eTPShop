@@ -1,17 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import { productsFetch, allProductsFetch } from "../../slices/productsSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
 import { Card, Col, Row } from "react-bootstrap";
 import { formatCurrency } from "../../utilities/formatCurrency";
+import { TextField } from "@mui/material";
 
 function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const products = useSelector((state) => state.products.items);
   //const [productId, setProductId] = useState(0);
+
+  const [query, setQuery] = useState("");
 
   console.log(products);
   useEffect(() => {
@@ -23,12 +26,24 @@ function Home() {
     navigate(`/product/${id}`);
   }
 
+  const filteredProduct = useMemo(() => {
+    return products.filter((item) => {
+      return item.name.toLowerCase().includes(query.toLowerCase());
+    });
+  }, [products, query]);
+
   return (
     <>
-      <h1>home page</h1>
+      <TextField
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        type="search"
+        helperText="search"
+        variant="standard"
+      ></TextField>
       <div>
         <Row md={2} xs={1} lg={3} className="g-3">
-          {products?.map((product) => (
+          {filteredProduct?.map((product) => (
             <Col
               key={product.name}
               onClick={() => navigateProductDetail(product._id)}

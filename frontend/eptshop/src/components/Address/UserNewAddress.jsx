@@ -25,7 +25,7 @@ function UserNewAddress(props) {
           addressId: props.id,
         })
       ).unwrap();
-      console.log(res);
+      alert(res.message);
     } catch (err) {
       console.log(err);
       alert(err.message);

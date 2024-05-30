@@ -166,15 +166,31 @@ function UserProfile() {
 
               <Row className="mt-2">
                 <Col xs={6}>
+                  {enableEdit ? (
+                    <Button
+                      className=""
+                      variant="outlined"
+                      sx={{ marginRight: 2 }}
+                      onClick={() => handleEdit()}
+                    >
+                      Edit
+                    </Button>
+                  ) : (
+                    <Button
+                      className=""
+                      variant="outlined"
+                      sx={{ marginRight: 2 }}
+                      onClick={() => handleEdit()}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+
                   <Button
-                    className=""
-                    variant="outlined"
-                    sx={{ marginRight: 2 }}
-                    onClick={() => handleEdit()}
+                    type="submit"
+                    variant="contained"
+                    disabled={enableEdit}
                   >
-                    Edit
-                  </Button>
-                  <Button type="submit" variant="contained">
                     Save change
                   </Button>
                 </Col>

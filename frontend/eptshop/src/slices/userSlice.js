@@ -11,6 +11,8 @@ const initialState = {
   dob: "",
   addresses: [],
   allowAccess: true,
+  addressInfos: {},
+  show: 0,
 };
 
 export const fetchVerify = createAsyncThunk(
@@ -192,7 +194,7 @@ export const fetchSignUp = createAsyncThunk(
 
 export const fetchConfirmAndBuy = createAsyncThunk(
   "user/fetchConfirmAndBuy",
-  async (OrderId, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       const res = await axios.request({
         headers: {
@@ -200,7 +202,7 @@ export const fetchConfirmAndBuy = createAsyncThunk(
         },
         method: "POST",
         url: `http://localhost:5000/user/confirmOder`,
-        data: { OrderId },
+        data: data,
       });
       return res.data;
     } catch (err) {
@@ -231,6 +233,12 @@ const userSlice = createSlice({
       state.message = "";
       state.status = "idle";
       localStorage.clear();
+    },
+    setOrderAddress: (state, action) => {
+      state.addressInfos = action.payload.addressInfos;
+    },
+    setShowPage: (state, action) => {
+      state.show = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -362,6 +370,7 @@ const userSlice = createSlice({
       state.message = action.payload.message;
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
+      state.addressInfos = {};
     });
     builder.addCase(fetchConfirmAndBuy.rejected, (state, action) => {
       state.status = "fail";
@@ -370,6 +379,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { removeEmail, reset } = userSlice.actions;
+export const { removeEmail, reset, setOrderAddress, setShowPage } =
+  userSlice.actions;
 
 export default userSlice.reducer;

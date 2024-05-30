@@ -33,7 +33,21 @@ function Order(props) {
                   );
                 })}
               <Row>
-                <Col xs={10}></Col>
+                <Col xs={10}>
+                  <Row className="mb-1">
+                    <Col xs={3}>{props.orders?.name}</Col>
+                  </Row>
+                  <Row className="mb-1">
+                    <Col className="text-secondary">
+                      {props.orders?.phoneNumber}
+                    </Col>
+                  </Row>
+                  <Row className="mb-1">
+                    <label className="text-secondary">
+                      {props.orders?.address}
+                    </label>
+                  </Row>
+                </Col>
                 <Col
                   className="d-flex align-items-center flex-row-reverse"
                   xs={2}

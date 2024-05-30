@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, Col, Row, Container } from "react-bootstrap";
 import "./Profile.css";
 
@@ -23,20 +23,9 @@ function Profile() {
     <UserCartAwaitPayment />,
     <UserCartFinish />,
   ];
-  const [showComponent, setShowComponent] = useState(0);
+  const show = useSelector((state) => state.user.show);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      phone: data.get("phone"),
-      newpassword: data.get("newpassword"),
-      confirmpassword: data.get("confirmpassword"),
-      address: data.get("address"),
-      dateofbirth: data.get("dateofbirth"),
-    });
-  };
+  const [showComponent, setShowComponent] = useState(show);
   return (
     <>
       <Container className="px-4 px-lg-5 my-5">

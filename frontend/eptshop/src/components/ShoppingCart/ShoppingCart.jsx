@@ -9,7 +9,13 @@ import {
 import { formatCurrency } from "../../utilities/formatCurrency";
 import CartItem from "../CartItem/CartItem";
 import { useNavigate } from "react-router-dom";
-import { fetchConfirmAndBuy, removeEmail } from "../../slices/userSlice";
+import {
+  fetchConfirmAndBuy,
+  fetchGetAllAddress,
+  removeEmail,
+  reset,
+} from "../../slices/userSlice";
+import ListAddress from "./ListAddress";
 
 export function ShoppingCart() {
   const dispatch = useDispatch();
@@ -19,6 +25,8 @@ export function ShoppingCart() {
   const amount = useSelector((state) => state.cart.cartTotalAmount);
   const cartItem = useSelector((state) => state.cart.cartItems);
   const orderId = useSelector((state) => state.cart.orderId);
+  const message = useSelector((state) => state.user.message);
+  const addressInfos = useSelector((state) => state.user.addressInfos);
 
   function haveCartItems(item) {
     if (item) return true;
@@ -28,8 +36,10 @@ export function ShoppingCart() {
   useEffect(() => {
     try {
       dispatch(showCartItemsFetch());
+      dispatch(fetchGetAllAddress());
     } catch (err) {
       if (err.message === "signin again") {
+        dispatch(reset());
         navigate("/login");
       }
     }
@@ -37,7 +47,9 @@ export function ShoppingCart() {
 
   const handleConfirmAndBuy = async (e) => {
     try {
-      const res = await dispatch(fetchConfirmAndBuy(orderId)).unwrap();
+      const res = await dispatch(
+        fetchConfirmAndBuy({ orderId, addressInfos })
+      ).unwrap();
       alert(res.message);
       dispatch(dropCart());
     } catch (err) {
@@ -46,7 +58,7 @@ export function ShoppingCart() {
         alert(err.message);
         navigate("/login");
       }
-      console.log(err);
+      alert(err.message);
     }
   };
 
@@ -69,6 +81,7 @@ export function ShoppingCart() {
           <div className="ms-auto fw-bold fs-5">
             Total: {formatCurrency(amount)}
           </div>
+          <ListAddress></ListAddress>
           <Button
             variant="outline-primary"
             className="ms-auto fw-bold fs-5"
