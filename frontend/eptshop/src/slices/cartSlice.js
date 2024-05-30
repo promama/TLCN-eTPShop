@@ -12,6 +12,7 @@ const initialState = {
   showOffCanvas: false,
   orderId: localStorage.getItem("orderId") || "",
   orders: [],
+  isLoading: false,
 };
 
 export const showCartItemsFetch = createAsyncThunk(
@@ -174,6 +175,9 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     //add item to cart
+    builder.addCase(addToCartFetch.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(addToCartFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.message = "add to cart successfully";
@@ -184,12 +188,17 @@ const cartSlice = createSlice({
       localStorage.setItem("orderId", action.payload.orderId);
       if (action.payload.token)
         localStorage.setItem("access_token", action.payload.token);
+      state.isLoading = false;
     });
     builder.addCase(addToCartFetch.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
     //subtract item from cart
+    builder.addCase(subtractToCartFetch.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(subtractToCartFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.message = "subtract to cart successfully";
@@ -198,10 +207,12 @@ const cartSlice = createSlice({
       state.cartTotalQuantities = action.payload.quantity;
       state.orderId = action.payload.orderId;
       localStorage.setItem("orderId", action.payload.orderId);
+      state.isLoading = false;
     });
     builder.addCase(subtractToCartFetch.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
     //show item in cart
     builder.addCase(showCartItemsFetch.fulfilled, (state, action) => {
@@ -215,40 +226,60 @@ const cartSlice = createSlice({
       state.message = action.payload.message;
     });
     //show all orders
+    builder.addCase(showAllOrder.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(showAllOrder.fulfilled, (state, action) => {
       state.status = "success";
       state.orders = action.payload.listOrder;
+      state.isLoading = false;
     });
     builder.addCase(showAllOrder.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
     //show "waiting approve" orders
+    builder.addCase(showWaitingApproveOrder.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(showWaitingApproveOrder.fulfilled, (state, action) => {
       state.status = "success";
       state.orders = action.payload.listOrder;
+      state.isLoading = false;
     });
     builder.addCase(showWaitingApproveOrder.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
     //show "delivering" orders
+    builder.addCase(showDeliveringOrder.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(showDeliveringOrder.fulfilled, (state, action) => {
       state.status = "success";
       state.orders = action.payload.listOrder;
+      state.isLoading = false;
     });
     builder.addCase(showDeliveringOrder.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
     //show "finish" orders
+    builder.addCase(showFinishOrder.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(showFinishOrder.fulfilled, (state, action) => {
       state.status = "success";
       state.orders = action.payload.listOrder;
+      state.isLoading = false;
     });
     builder.addCase(showFinishOrder.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
   },
 });

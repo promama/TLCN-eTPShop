@@ -19,12 +19,14 @@ import {
   fetchChangeUserProfile,
   fetchUserShortProfile,
 } from "../../slices/userSlice";
+import { CircularProgress } from "@mui/material";
 
 function UserProfile() {
   const email = useSelector((state) => state.user.email);
   const dob = useSelector((state) => state.user.dob);
   const phoneNumber = useSelector((state) => state.user.phoneNumber);
   const gender = useSelector((state) => state.user.gender);
+  const isLoading = useSelector((state) => state.user.isLoading);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -58,9 +60,7 @@ function UserProfile() {
       ).unwrap();
       setEnableEdit(true);
       alert(res.message);
-      console.log(res);
     } catch (err) {
-      console.log(err);
       alert(err.message);
       if (err.message === "signin again") {
         navigate("/login");
@@ -90,8 +90,6 @@ function UserProfile() {
     }
     console.log(phoneNumber);
   }, [dispatch, phoneNumber, navigate]);
-
-  //useEffect(() => {}, [dob, phoneNumber, gender]);
 
   return (
     <Card>
@@ -185,14 +183,17 @@ function UserProfile() {
                       Cancel
                     </Button>
                   )}
-
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={enableEdit}
-                  >
-                    Save change
-                  </Button>
+                  {!isLoading ? (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      disabled={enableEdit}
+                    >
+                      Save change
+                    </Button>
+                  ) : (
+                    <CircularProgress />
+                  )}
                 </Col>
               </Row>
             </Col>

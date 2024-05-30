@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 
 import { Card, Col, Row } from "react-bootstrap";
 import { formatCurrency } from "../../utilities/formatCurrency";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 
 function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const products = useSelector((state) => state.products.items);
+  const isLoading = useSelector((state) => state.products.isLoading);
   //const [productId, setProductId] = useState(0);
 
   const [query, setQuery] = useState("");
@@ -43,29 +44,33 @@ function Home() {
       ></TextField>
       <div>
         <Row md={2} xs={1} lg={3} className="g-3">
-          {filteredProduct?.map((product) => (
-            <Col
-              key={product.name}
-              onClick={() => navigateProductDetail(product._id)}
-            >
-              <Card className="h-100">
-                <Card.Img
-                  variant="top"
-                  src={product.url}
-                  height="200px"
-                  style={{ objectFit: "cover" }}
-                />
-                <Card.Body className="d-flex flex-column">
-                  <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
-                    <span className="fs-2">{product.name}</span>
-                    <span className="ms-2 text-muted">
-                      {formatCurrency(product.price)}
-                    </span>
-                  </Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+          {!isLoading ? (
+            filteredProduct?.map((product) => (
+              <Col
+                key={product.name}
+                onClick={() => navigateProductDetail(product._id)}
+              >
+                <Card className="h-100">
+                  <Card.Img
+                    variant="top"
+                    src={product.url}
+                    height="200px"
+                    style={{ objectFit: "cover" }}
+                  />
+                  <Card.Body className="d-flex flex-column">
+                    <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
+                      <span className="fs-2">{product.name}</span>
+                      <span className="ms-2 text-muted">
+                        {formatCurrency(product.price)}
+                      </span>
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))
+          ) : (
+            <CircularProgress />
+          )}
         </Row>
       </div>
     </>

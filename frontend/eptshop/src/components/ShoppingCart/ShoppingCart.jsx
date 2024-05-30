@@ -16,6 +16,7 @@ import {
   reset,
 } from "../../slices/userSlice";
 import ListAddress from "./ListAddress";
+import { CircularProgress } from "@mui/material";
 
 export function ShoppingCart() {
   const dispatch = useDispatch();
@@ -25,8 +26,8 @@ export function ShoppingCart() {
   const amount = useSelector((state) => state.cart.cartTotalAmount);
   const cartItem = useSelector((state) => state.cart.cartItems);
   const orderId = useSelector((state) => state.cart.orderId);
-  const message = useSelector((state) => state.user.message);
   const addressInfos = useSelector((state) => state.user.addressInfos);
+  const isLoading = useSelector((state) => state.user.isLoading);
 
   function haveCartItems(item) {
     if (item) return true;
@@ -53,12 +54,11 @@ export function ShoppingCart() {
       alert(res.message);
       dispatch(dropCart());
     } catch (err) {
+      alert(err.message);
       if (err.message === "signin again") {
         dispatch(removeEmail());
-        alert(err.message);
         navigate("/login");
       }
-      alert(err.message);
     }
   };
 
@@ -82,13 +82,18 @@ export function ShoppingCart() {
             Total: {formatCurrency(amount)}
           </div>
           <ListAddress></ListAddress>
-          <Button
-            variant="outline-primary"
-            className="ms-auto fw-bold fs-5"
-            onClick={handleConfirmAndBuy}
-          >
-            Confirm & buy
-          </Button>
+
+          {!isLoading ? (
+            <Button
+              variant="outline-primary"
+              className="ms-auto fw-bold fs-5"
+              onClick={handleConfirmAndBuy}
+            >
+              Confirm & buy
+            </Button>
+          ) : (
+            <CircularProgress />
+          )}
         </Stack>
       </Offcanvas.Body>
     </Offcanvas>

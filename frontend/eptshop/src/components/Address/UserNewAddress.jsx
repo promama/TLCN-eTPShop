@@ -1,12 +1,13 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { Card, Col, Container, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchAddNewAddress } from "../../slices/userSlice";
 import { useNavigate } from "react-router-dom";
 
 function UserNewAddress(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoading = useSelector((state) => state.user.isLoading);
 
   const handleAddNewAddress = async (event) => {
     event.preventDefault();
@@ -87,26 +88,30 @@ function UserNewAddress(props) {
                 />
               </Col>
             </Row>
-            <Row>
-              <Col className="mt-2">
-                <Button
-                  className="bg-white"
-                  variant="outlined"
-                  color="error"
-                  sx={{ marginRight: 2, color: "red" }}
-                  onClick={() => props.parentCallback(false)}
-                >
-                  Discard change
-                </Button>
-                <Button
-                  className="bg-white text-blue"
-                  type="submit"
-                  variant="outlined"
-                >
-                  Save change
-                </Button>
-              </Col>
-            </Row>
+            {!isLoading ? (
+              <Row>
+                <Col className="mt-2">
+                  <Button
+                    className="bg-white"
+                    variant="outlined"
+                    color="error"
+                    sx={{ marginRight: 2, color: "red" }}
+                    onClick={() => props.parentCallback(false)}
+                  >
+                    Discard change
+                  </Button>
+                  <Button
+                    className="bg-white text-blue"
+                    type="submit"
+                    variant="outlined"
+                  >
+                    Save change
+                  </Button>
+                </Col>
+              </Row>
+            ) : (
+              <CircularProgress />
+            )}
           </Box>
         </Container>
       </Card.Body>

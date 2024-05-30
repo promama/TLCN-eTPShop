@@ -10,6 +10,7 @@ const initialState = {
   color: "",
   size: "",
   productSizes: [],
+  isLoading: false,
 };
 
 export const productColorFetch = createAsyncThunk(
@@ -85,9 +86,13 @@ const productsSlice = createSlice({
       state.status = "success";
       state.backend = action.payload.data;
     });
+    builder.addCase(allProductsFetch.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(allProductsFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.items = action.payload.products;
+      state.isLoading = false;
     });
     builder.addCase(productFetch.fulfilled, (state, action) => {
       state.status = "success";

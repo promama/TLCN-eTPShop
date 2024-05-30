@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 import { changeSize, changeColor } from "../../slices/productsSlice";
 import { removeEmail } from "../../slices/userSlice";
 import { formatCurrency } from "../../utilities/formatCurrency";
+import { CircularProgress } from "@mui/material";
 
 function Product() {
   const params = useParams();
@@ -22,6 +23,7 @@ function Product() {
   const productSizes = useSelector((state) => state.products.productSizes);
   const size = useSelector((state) => state.products.size);
   const color = useSelector((state) => state.products.color);
+  const isLoading = useSelector((state) => state.cart.isLoading);
 
   const [choosenColor, setChoosenColor] = useState(
     localStorage.getItem("color") || color
@@ -89,7 +91,7 @@ function Product() {
   const addToCart = async (event) => {
     event.preventDefault();
     try {
-      await dispatch(
+      const res = await dispatch(
         addToCartFetch({
           productId: params,
           color: choosenColor,
@@ -97,13 +99,13 @@ function Product() {
           quantity: num,
         })
       ).unwrap();
+      alert(res.message);
     } catch (err) {
+      alert(err.message);
       if (err.message === "signin again") {
         dispatch(removeEmail());
-        alert(err.message);
         navigate("/login");
       }
-      console.log(err);
     }
   };
 
@@ -245,52 +247,56 @@ function Product() {
                   </div>
                   <div className="mt-3">
                     {isBuyable() ? (
-                      <>
-                        <div className="">
-                          <Button
-                            variant="outlined"
-                            sx={{ height: 40 }}
-                            size="small"
-                            onClick={() => {
-                              if (num <= 1) {
-                                alert("can't subtract more!");
-                              } else {
-                                setNum(parseInt(num, 10) - 1);
-                              }
-                            }}
-                          >
-                            -
-                          </Button>
-                          <TextField
-                            id="input-quantity"
-                            size="small"
-                            type="number"
-                            variant="outlined"
-                            sx={{ ml: 1, mr: 1, width: 80, height: 40 }}
-                            inputProps={{ min: 1, max: 10 }}
-                            onChange={(e) => handleChange(e)}
-                            value={num}
-                          ></TextField>
-                          <Button
-                            variant="outlined"
-                            sx={{ height: 40 }}
-                            onClick={() => {
-                              setNum(parseInt(num, 10) + 1);
-                            }}
-                          >
-                            +
-                          </Button>
-                        </div>
-                        <div>
-                          <Button
-                            className="mt-3"
-                            variant="outlined"
-                            onClick={addToCart}
-                          >
-                            Add to Cart
-                          </Button>
-                        </div>
-                      </>
+                      !isLoading ? (
+                        <>
+                          <div className="">
+                            <Button
+                              variant="outlined"
+                              sx={{ height: 40 }}
+                              size="small"
+                              onClick={() => {
+                                if (num <= 1) {
+                                  alert("can't subtract more!");
+                                } else {
+                                  setNum(parseInt(num, 10) - 1);
+                                }
+                              }}
+                            >
+                              -
+                            </Button>
+                            <TextField
+                              id="input-quantity"
+                              size="small"
+                              type="number"
+                              variant="outlined"
+                              sx={{ ml: 1, mr: 1, width: 80, height: 40 }}
+                              inputProps={{ min: 1, max: 10 }}
+                              onChange={(e) => handleChange(e)}
+                              value={num}
+                            ></TextField>
+                            <Button
+                              variant="outlined"
+                              sx={{ height: 40 }}
+                              onClick={() => {
+                                setNum(parseInt(num, 10) + 1);
+                              }}
+                            >
+                              +
+                            </Button>
+                          </div>
+                          <div>
+                            <Button
+                              className="mt-3"
+                              variant="outlined"
+                              onClick={addToCart}
+                            >
+                              Add to Cart
+                            </Button>
+                          </div>
+                        </>
+                      ) : (
+                        <CircularProgress />
+                      )
                     ) : (
                       "Out of Stock"
                     )}

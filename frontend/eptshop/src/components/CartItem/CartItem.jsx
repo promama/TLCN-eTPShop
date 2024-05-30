@@ -1,6 +1,6 @@
 import { Button, Stack } from "react-bootstrap";
 import { formatCurrency } from "../../utilities/formatCurrency";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCartFetch, subtractToCartFetch } from "../../slices/cartSlice";
 import { removeEmail, reset } from "../../slices/userSlice";
@@ -10,40 +10,67 @@ import { useEffect } from "react";
 export function CartItem(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const message = useSelector((state) => state.cart.message);
+  const isLoading = useSelector((state) => state.cart.isLoading);
 
-  function addMoreToCart() {
-    dispatch(
-      addToCartFetch({
-        productId: { id: props.productId },
-        color: props.color,
-        size: props.size,
-        quantity: 1,
-      })
-    );
-  }
+  const addMoreToCart = async (e) => {
+    try {
+      const res = await dispatch(
+        addToCartFetch({
+          productId: { id: props.productId },
+          color: props.color,
+          size: props.size,
+          quantity: 1,
+        })
+      ).unwrap();
+      alert(res.message);
+    } catch (err) {
+      alert(err.message);
+      if (err.message === "signin again") {
+        dispatch(removeEmail());
+        navigate("/login");
+      }
+    }
+  };
 
-  function subtractLessToCart() {
-    dispatch(
-      subtractToCartFetch({
-        productId: { id: props.productId },
-        color: props.color,
-        size: props.size,
-        quantity: 1,
-      })
-    );
-  }
+  const subtractLessToCart = async (e) => {
+    try {
+      const res = await dispatch(
+        subtractToCartFetch({
+          productId: { id: props.productId },
+          color: props.color,
+          size: props.size,
+          quantity: 1,
+        })
+      ).unwrap();
+      alert(res.message);
+    } catch (err) {
+      alert(err.message);
+      if (err.message === "signin again") {
+        dispatch(removeEmail());
+        navigate("/login");
+      }
+    }
+  };
 
-  function removeToCart() {
-    dispatch(
-      subtractToCartFetch({
-        productId: { id: props.productId },
-        color: props.color,
-        size: props.size,
-        quantity: props.quantity,
-      })
-    );
-  }
+  const removeToCart = async (e) => {
+    try {
+      const res = await dispatch(
+        subtractToCartFetch({
+          productId: { id: props.productId },
+          color: props.color,
+          size: props.size,
+          quantity: props.quantity,
+        })
+      ).unwrap();
+      alert(res.message);
+    } catch (err) {
+      alert(err.message);
+      if (err.message === "signin again") {
+        dispatch(removeEmail());
+        navigate("/login");
+      }
+    }
+  };
 
   return (
     <Stack direction="horizontal" gap={2} className="d-flex align-items-center">
@@ -80,30 +107,36 @@ export function CartItem(props) {
       <div className="text-muted" style={{ fontSize: ".85rem" }}>
         {formatCurrency(props.price * props.quantity)}
       </div>
-      <Button
-        variant="outline-primary"
-        size="sm"
-        style={{ width: "30px", height: "30px" }}
-        onClick={subtractLessToCart}
-      >
-        -
-      </Button>
-      <Button
-        variant="outline-primary"
-        size="sm"
-        style={{ width: "30px", height: "30px" }}
-        onClick={addMoreToCart}
-      >
-        +
-      </Button>
-      <Button
-        variant="outline-danger"
-        size="sm"
-        style={{ width: "30px", height: "30px" }}
-        onClick={removeToCart}
-      >
-        &times;
-      </Button>
+      {!isLoading ? (
+        <>
+          <Button
+            variant="outline-primary"
+            size="sm"
+            style={{ width: "30px", height: "30px" }}
+            onClick={subtractLessToCart}
+          >
+            -
+          </Button>
+          <Button
+            variant="outline-primary"
+            size="sm"
+            style={{ width: "30px", height: "30px" }}
+            onClick={addMoreToCart}
+          >
+            +
+          </Button>
+          <Button
+            variant="outline-danger"
+            size="sm"
+            style={{ width: "30px", height: "30px" }}
+            onClick={removeToCart}
+          >
+            &times;
+          </Button>
+        </>
+      ) : (
+        <CircularProgress />
+      )}
     </Stack>
   );
 }

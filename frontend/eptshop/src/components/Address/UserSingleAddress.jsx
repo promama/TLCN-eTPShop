@@ -6,13 +6,15 @@ import {
   fetchUserSetDefaultAddress,
 } from "../../slices/userSlice";
 import { Col, Container, Row, Stack } from "react-bootstrap";
-import { TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import UserNewAddress from "./UserNewAddress";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 function UserSingleAddress(props) {
+  const isLoading = useSelector((state) => state.user.isLoading);
+
   const [addNewAddress, setAddNewAddress] = useState(true);
   const dispatch = useDispatch();
 
@@ -97,43 +99,47 @@ function UserSingleAddress(props) {
                 </>
               )}
             </Col>
-            <Col xs={2} className="p-2">
-              <Row className="mb-2 justify-content-center">
-                <Col xs={6}>
-                  <button
-                    type="button"
-                    className="btn btn-outline-primary"
-                    onClick={() => setAddNewAddress(!addNewAddress)}
-                  >
-                    {addNewAddress ? "Update" : "Cancel"}
-                  </button>
-                </Col>
-                {isDefault(props.isDefault) && (
+            {!isLoading ? (
+              <Col xs={2} className="p-2">
+                <Row className="mb-2 justify-content-center">
                   <Col xs={6}>
                     <button
                       type="button"
-                      className="btn btn-outline-danger"
-                      onClick={handleDeleteAddress}
+                      className="btn btn-outline-primary"
+                      onClick={() => setAddNewAddress(!addNewAddress)}
                     >
-                      Delete
+                      {addNewAddress ? "Update" : "Cancel"}
                     </button>
                   </Col>
-                )}
-              </Row>
-              <Row>
-                <Col xs>
                   {isDefault(props.isDefault) && (
-                    <button
-                      type="button"
-                      className="btn btn-outline-primary"
-                      onClick={handleSetDefault}
-                    >
-                      Set default
-                    </button>
+                    <Col xs={6}>
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger"
+                        onClick={handleDeleteAddress}
+                      >
+                        Delete
+                      </button>
+                    </Col>
                   )}
-                </Col>
-              </Row>
-            </Col>
+                </Row>
+                <Row>
+                  <Col xs>
+                    {isDefault(props.isDefault) && (
+                      <button
+                        type="button"
+                        className="btn btn-outline-primary"
+                        onClick={handleSetDefault}
+                      >
+                        Set default
+                      </button>
+                    )}
+                  </Col>
+                </Row>
+              </Col>
+            ) : (
+              <CircularProgress />
+            )}
           </Container>
         </Box>
         <hr className="hr" />

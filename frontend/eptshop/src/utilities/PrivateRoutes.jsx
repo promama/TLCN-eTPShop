@@ -8,18 +8,14 @@ function PrivateRoutes() {
   const navigate = useNavigate();
   const allowAccess = useSelector((state) => state.user.allowAccess);
 
-  const [access, setAccess] = useState(allowAccess);
-
   useEffect(() => {
     try {
       dispatch(fetchVerify());
-      setAccess(!access);
     } catch (err) {
-      setAccess(false);
       dispatch(reset());
       navigate("/signin");
     }
-  }, [dispatch, navigate, setAccess, access]);
+  }, [dispatch, navigate]);
   return allowAccess ? <Outlet /> : <Navigate to="/login" />;
 }
 

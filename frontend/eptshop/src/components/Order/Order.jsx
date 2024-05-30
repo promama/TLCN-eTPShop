@@ -4,6 +4,17 @@ import SIngleOrder from "./SIngleOrder";
 import { formatCurrency } from "../../utilities/formatCurrency";
 
 function Order(props) {
+  function checkStatus(status) {
+    if (status === "In cart") {
+      return "blue";
+    } else if (status === "Waiting approve") {
+      return "#ff6500";
+    } else if (status === "Delivering") {
+      return "#00f6ff";
+    } else if (status === "Finish") {
+      return "#1bff00";
+    } else return "#ff2525";
+  }
   return (
     <Stack className="mt-1">
       {props.orders && (
@@ -16,7 +27,9 @@ function Order(props) {
                 className="d-flex align-items-center"
               >
                 <div className="me-auto">Id: {props.orders.orderId}</div>
-                {props.orders.status}
+                <div style={{ color: checkStatus(props.orders.status) }}>
+                  {props.orders.status}
+                </div>
               </Stack>
             </Card.Header>
             <Card.Body>

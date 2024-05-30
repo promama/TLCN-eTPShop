@@ -13,6 +13,7 @@ const initialState = {
   allowAccess: true,
   addressInfos: {},
   show: 0,
+  isLoading: false,
 };
 
 export const fetchVerify = createAsyncThunk(
@@ -243,15 +244,23 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     //create new user account
+    builder.addCase(fetchSignUp.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchSignUp.fulfilled, (state, action) => {
       state.status = "success";
       state.message = "create success!";
+      state.isLoading = false;
     });
     builder.addCase(fetchSignUp.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
     //sign in
+    builder.addCase(fetchLogin.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchLogin.fulfilled, (state, action) => {
       state.status = "success";
       state.message = "login success!";
@@ -260,10 +269,12 @@ const userSlice = createSlice({
       state.phoneNumber = action.payload.phoneNumber;
       state.gender = action.payload.gender;
       state.dob = action.payload.birthDay;
+      state.isLoading = true;
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = true;
     });
     //find user addresses
     builder.addCase(fetchAddress.fulfilled, (state, action) => {
@@ -277,15 +288,20 @@ const userSlice = createSlice({
       state.message = action.payload.message;
     });
     //add new user address
+    builder.addCase(fetchAddNewAddress.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchAddNewAddress.fulfilled, (state, action) => {
       state.status = "success";
       state.addresses = action.payload.address;
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
+      state.isLoading = true;
     });
     builder.addCase(fetchAddNewAddress.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = true;
     });
     //get all user addresses
     builder.addCase(fetchGetAllAddress.fulfilled, (state, action) => {
@@ -299,6 +315,9 @@ const userSlice = createSlice({
       state.message = action.payload.message;
     });
     //change user profile
+    builder.addCase(fetchChangeUserProfile.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchChangeUserProfile.fulfilled, (state, action) => {
       state.status = "success";
       state.message = action.payload.message;
@@ -307,10 +326,12 @@ const userSlice = createSlice({
       state.phoneNumber = action.payload.data.phoneNumber;
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
+      state.isLoading = false;
     });
     builder.addCase(fetchChangeUserProfile.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
     //change user short profile
     builder.addCase(fetchUserShortProfile.fulfilled, (state, action) => {
@@ -327,28 +348,38 @@ const userSlice = createSlice({
       state.message = action.payload.message;
     });
     //delete address
+    builder.addCase(fetchUserDeleteAddress.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchUserDeleteAddress.fulfilled, (state, action) => {
       state.status = "success";
       state.message = action.payload.message;
       state.addresses = action.payload.address;
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
+      state.isLoading = true;
     });
     builder.addCase(fetchUserDeleteAddress.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = true;
     });
     //set new default address
+    builder.addCase(fetchUserSetDefaultAddress.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchUserSetDefaultAddress.fulfilled, (state, action) => {
       state.status = "success";
       state.message = action.payload.message;
       state.addresses = action.payload.address;
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
+      state.isLoading = false;
     });
     builder.addCase(fetchUserSetDefaultAddress.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
     //protected route
     builder.addCase(fetchVerify.fulfilled, (state, action) => {
@@ -365,16 +396,21 @@ const userSlice = createSlice({
       state.allowAccess = action.payload.success;
     });
     //confirm oder
+    builder.addCase(fetchConfirmAndBuy.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchConfirmAndBuy.fulfilled, (state, action) => {
       state.status = "success";
       state.message = action.payload.message;
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
       state.addressInfos = {};
+      state.isLoading = true;
     });
     builder.addCase(fetchConfirmAndBuy.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = true;
     });
   },
 });

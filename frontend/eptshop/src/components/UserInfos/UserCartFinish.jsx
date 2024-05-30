@@ -4,11 +4,13 @@ import { showFinishOrder } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { Card, Container } from "react-bootstrap";
 import Order from "../Order/Order";
+import { CircularProgress } from "@mui/material";
 
 function UserCartFinish() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const listOrders = useSelector((state) => state.cart.orders);
+  const isLoading = useSelector((state) => state.cart.isLoading);
 
   useEffect(() => {
     try {
@@ -22,11 +24,10 @@ function UserCartFinish() {
 
   return (
     <Card>
-      <Card.Header className="bg-transparent mt-2">
-        Delivering Orders
-      </Card.Header>
+      <Card.Header className="bg-transparent mt-2">Finish Orders</Card.Header>
       <Card.Body>
-        {listOrders &&
+        {!isLoading ? (
+          listOrders &&
           listOrders
             ?.slice(0)
             .reverse()
@@ -36,7 +37,10 @@ function UserCartFinish() {
                   <Order key={order.orderId} orders={order} />
                 </Container>
               );
-            })}
+            })
+        ) : (
+          <CircularProgress />
+        )}
       </Card.Body>
     </Card>
   );
