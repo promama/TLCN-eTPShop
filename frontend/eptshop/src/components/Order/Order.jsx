@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, Col, Row, Stack } from "react-bootstrap";
 import SIngleOrder from "./SIngleOrder";
 import { formatCurrency } from "../../utilities/formatCurrency";
@@ -15,6 +14,7 @@ function Order(props) {
       return "#1bff00";
     } else return "#ff2525";
   }
+
   return (
     <Stack className="mt-1">
       {props.orders && (
@@ -35,7 +35,6 @@ function Order(props) {
             <Card.Body>
               {props.orders.productInOrder &&
                 props.orders.productInOrder.map((product) => {
-                  // return <Stack>{product.productName}</Stack>;
                   return (
                     <div>
                       <SIngleOrder

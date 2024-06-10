@@ -4,9 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { formatCurrency } from "../../utilities/formatCurrency";
-import { CircularProgress, TextField } from "@mui/material";
+import { CircularProgress, Rating, TextField } from "@mui/material";
 
 function Home() {
   const dispatch = useDispatch();
@@ -59,10 +59,28 @@ function Home() {
                   />
                   <Card.Body className="d-flex flex-column">
                     <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
-                      <span className="fs-2">{product.name}</span>
-                      <span className="ms-2 text-muted">
-                        {formatCurrency(product.price)}
-                      </span>
+                      <Container>
+                        <Row>
+                          <span className="fs-2">{product.name}</span>
+                          <span className="ms-2 text-muted">
+                            {formatCurrency(product.price)}
+                          </span>
+                        </Row>
+                        <span className="fs-2">
+                          <Rating
+                            name="read-only"
+                            value={product.totalPoint / product.numberOfRate}
+                            precision={0.5}
+                            readOnly
+                          />
+                        </span>
+                        <span className="fs-2">
+                          {" ("}
+                          {product.numberOfRate}
+                          {")"}
+                        </span>
+                        <span className="fs-2"> - Sold {product?.sold}</span>
+                      </Container>
                     </Card.Title>
                   </Card.Body>
                 </Card>

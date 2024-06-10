@@ -269,12 +269,12 @@ const userSlice = createSlice({
       state.phoneNumber = action.payload.phoneNumber;
       state.gender = action.payload.gender;
       state.dob = action.payload.birthDay;
-      state.isLoading = true;
+      state.isLoading = false;
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
-      state.isLoading = true;
+      state.isLoading = false;
     });
     //find user addresses
     builder.addCase(fetchAddress.fulfilled, (state, action) => {
@@ -296,12 +296,12 @@ const userSlice = createSlice({
       state.addresses = action.payload.address;
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
-      state.isLoading = true;
+      state.isLoading = false;
     });
     builder.addCase(fetchAddNewAddress.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
-      state.isLoading = true;
+      state.isLoading = false;
     });
     //get all user addresses
     builder.addCase(fetchGetAllAddress.fulfilled, (state, action) => {
@@ -357,12 +357,12 @@ const userSlice = createSlice({
       state.addresses = action.payload.address;
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
-      state.isLoading = true;
+      state.isLoading = false;
     });
     builder.addCase(fetchUserDeleteAddress.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
-      state.isLoading = true;
+      state.isLoading = false;
     });
     //set new default address
     builder.addCase(fetchUserSetDefaultAddress.pending, (state, action) => {
@@ -405,12 +405,12 @@ const userSlice = createSlice({
       state.token = action.payload.token;
       localStorage.setItem("access_token", action.payload.token);
       state.addressInfos = {};
-      state.isLoading = true;
+      state.isLoading = false;
     });
     builder.addCase(fetchConfirmAndBuy.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
-      state.isLoading = true;
+      state.isLoading = false;
     });
   },
 });

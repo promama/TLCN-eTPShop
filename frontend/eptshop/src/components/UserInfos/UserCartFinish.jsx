@@ -32,11 +32,16 @@ function UserCartFinish() {
             ?.slice(0)
             .reverse()
             .map((order) => {
-              return (
-                <Container>
-                  <Order key={order.orderId} orders={order} />
-                </Container>
-              );
+              if (order.status === "Finish")
+                return (
+                  <Container>
+                    <Order
+                      key={order.orderId}
+                      orders={order}
+                      allowRating={true}
+                    />
+                  </Container>
+                );
             })
         ) : (
           <CircularProgress />

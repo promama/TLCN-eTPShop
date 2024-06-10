@@ -1,9 +1,39 @@
-import React from "react";
-import { Col, Container, Row, Stack } from "react-bootstrap";
-import { Box } from "@mui/material";
+import React, { useState } from "react";
+import { Button, Col, Container, Row, Stack } from "react-bootstrap";
+import { Box, CircularProgress, Rating } from "@mui/material";
 import { formatCurrency } from "../../utilities/formatCurrency";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { fetchRatingProduct } from "../../slices/cartSlice";
+import { removeEmail } from "../../slices/userSlice";
 
 function SIngleOrder(props) {
+  const isLoading = useSelector((state) => state.user.isLoading);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [value, setValue] = useState(props.product.rating);
+
+  const handleRating = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await dispatch(
+        fetchRatingProduct({
+          _id: props.product._id,
+          productId: props.product.productId,
+          rating: value,
+        })
+      ).unwrap();
+      alert("Rating success");
+    } catch (err) {
+      alert(err.message);
+      if (err.message === "signin again") {
+        dispatch(removeEmail());
+        navigate("/login");
+      }
+    }
+  };
   return (
     <Stack>
       <Container className="mb-2">
@@ -37,6 +67,43 @@ function SIngleOrder(props) {
               {formatCurrency(props.product?.price)}
             </div>
           </Col>
+          {props.product?.status === "Finish" &&
+            (!isLoading ? (
+              <>
+                <Row>
+                  <Box
+                    sx={{
+                      "& > legend": { mt: 2 },
+                    }}
+                  >
+                    <Rating
+                      name="simple-controlled"
+                      value={value}
+                      disabled={!props.product.allowRating}
+                      onChange={(event, newValue) => {
+                        setValue(newValue);
+                      }}
+                    />
+                  </Box>
+                </Row>
+
+                {props.product.allowRating && (
+                  <Row>
+                    <Col xs={3}>
+                      <Button
+                        className="mb-2"
+                        onClick={handleRating}
+                        variant="outline-primary"
+                      >
+                        Submit Rating
+                      </Button>
+                    </Col>
+                  </Row>
+                )}
+              </>
+            ) : (
+              <CircularProgress />
+            ))}
         </Row>
       </Container>
     </Stack>

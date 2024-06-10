@@ -34,11 +34,12 @@ function UserCartDelivery() {
             ?.slice(0)
             .reverse()
             .map((order) => {
-              return (
-                <Container>
-                  <Order key={order.orderId} orders={order} />
-                </Container>
-              );
+              if (order.status === "Delivering")
+                return (
+                  <Container>
+                    <Order key={order.orderId} orders={order} />
+                  </Container>
+                );
             })
         ) : (
           <CircularProgress />

@@ -148,6 +148,25 @@ export const showFinishOrder = createAsyncThunk(
   }
 );
 
+export const fetchRatingProduct = createAsyncThunk(
+  "user/fetchRatingProduct",
+  async (productInfos, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        method: "POST",
+        url: `http://localhost:5000/user/rateProduct`,
+        data: { ...productInfos },
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -277,6 +296,20 @@ const cartSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(showFinishOrder.rejected, (state, action) => {
+      state.status = "fail";
+      state.message = action.payload.message;
+      state.isLoading = false;
+    });
+    //show "finish" orders
+    builder.addCase(fetchRatingProduct.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchRatingProduct.fulfilled, (state, action) => {
+      state.status = "success";
+      state.orders = action.payload.listOrder;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchRatingProduct.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
       state.isLoading = false;
