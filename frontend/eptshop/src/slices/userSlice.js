@@ -212,6 +212,44 @@ export const fetchConfirmAndBuy = createAsyncThunk(
   }
 );
 
+export const fetchFinishOrder = createAsyncThunk(
+  "user/fetchFinishOrder",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        method: "POST",
+        url: `http://localhost:5000/user/finishOrder`,
+        data: data,
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const fetchCancelOrder = createAsyncThunk(
+  "user/fetchCancelOrder",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        method: "POST",
+        url: `http://localhost:5000/user/cancelOrder`,
+        data: data,
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -408,6 +446,38 @@ const userSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(fetchConfirmAndBuy.rejected, (state, action) => {
+      state.status = "fail";
+      state.message = action.payload.message;
+      state.isLoading = false;
+    });
+    //finish order
+    builder.addCase(fetchFinishOrder.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchFinishOrder.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = action.payload.message;
+      state.token = action.payload.token;
+      localStorage.setItem("access_token", action.payload.token);
+      state.isLoading = false;
+    });
+    builder.addCase(fetchFinishOrder.rejected, (state, action) => {
+      state.status = "fail";
+      state.message = action.payload.message;
+      state.isLoading = false;
+    });
+    //cancel order
+    builder.addCase(fetchCancelOrder.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchCancelOrder.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = action.payload.message;
+      state.token = action.payload.token;
+      localStorage.setItem("access_token", action.payload.token);
+      state.isLoading = false;
+    });
+    builder.addCase(fetchCancelOrder.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
       state.isLoading = false;

@@ -1,8 +1,21 @@
-import { Card, Col, Row, Stack } from "react-bootstrap";
+import { Button, Card, Col, Row, Stack } from "react-bootstrap";
 import SIngleOrder from "./SIngleOrder";
 import { formatCurrency } from "../../utilities/formatCurrency";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchCancelOrder,
+  fetchFinishOrder,
+  reset,
+} from "../../slices/userSlice";
+import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 function Order(props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isLoading = useSelector((state) => state.user.isLoading);
+
   function checkStatus(status) {
     if (status === "In cart") {
       return "blue";
@@ -14,6 +27,48 @@ function Order(props) {
       return "#1bff00";
     } else return "#ff2525";
   }
+
+  function isCancelable(status) {
+    if (status === "Waiting approve") return true;
+    return false;
+  }
+
+  function isFinishable(status) {
+    if (status === "Delivering") return true;
+    return false;
+  }
+
+  const handleCancelOrder = async () => {
+    try {
+      const res = await dispatch(
+        fetchCancelOrder({ orderId: props.orders.orderId })
+      ).unwrap();
+      alert(res.message);
+    } catch (err) {
+      if (err.message === "signin again") {
+        dispatch(reset());
+        navigate("/signin");
+      } else {
+        alert(err.message);
+      }
+    }
+  };
+
+  const handleFinishOrder = async () => {
+    try {
+      const res = await dispatch(
+        fetchFinishOrder({ orderId: props.orders.orderId })
+      ).unwrap();
+      alert(res.message);
+    } catch (err) {
+      if (err.message === "signin again") {
+        dispatch(reset());
+        navigate("/signin");
+      } else {
+        alert(err.message);
+      }
+    }
+  };
 
   return (
     <Stack className="mt-1">
@@ -70,6 +125,23 @@ function Order(props) {
                   Total:
                 </Col>
               </Row>
+              {isLoading ? (
+                <CircularProgress />
+              ) : (
+                (isCancelable(props.orders.status) && (
+                  <Button variant="outline-danger" onClick={handleCancelOrder}>
+                    Cancel order
+                  </Button>
+                )) ||
+                (isFinishable(props.orders.status) && (
+                  <Button
+                    variant="outline-success  "
+                    onClick={handleFinishOrder}
+                  >
+                    Finish order
+                  </Button>
+                ))
+              )}
             </Card.Body>
           </Card>
         </div>
