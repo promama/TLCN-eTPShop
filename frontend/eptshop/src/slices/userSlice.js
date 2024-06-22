@@ -250,6 +250,25 @@ export const fetchCancelOrder = createAsyncThunk(
   }
 );
 
+export const fetchChangePassword = createAsyncThunk(
+  "user/fetchChangePassword",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+        method: "POST",
+        url: `http://localhost:5000/user/changePassword`,
+        data: data,
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -420,6 +439,9 @@ const userSlice = createSlice({
       state.isLoading = false;
     });
     //protected route
+    builder.addCase(fetchVerify.pending, (state, action) => {
+      state.allowAccess = true;
+    });
     builder.addCase(fetchVerify.fulfilled, (state, action) => {
       state.status = "success";
       state.message = action.payload.message;
@@ -478,6 +500,22 @@ const userSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(fetchCancelOrder.rejected, (state, action) => {
+      state.status = "fail";
+      state.message = action.payload.message;
+      state.isLoading = false;
+    });
+    //change password
+    builder.addCase(fetchChangePassword.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchChangePassword.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = action.payload.message;
+      state.token = action.payload.token;
+      localStorage.setItem("access_token", action.payload.token);
+      state.isLoading = false;
+    });
+    builder.addCase(fetchChangePassword.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
       state.isLoading = false;

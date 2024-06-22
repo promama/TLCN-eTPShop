@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAddNewAddress } from "../../slices/userSlice";
+import { fetchAddNewAddress, reset } from "../../slices/userSlice";
 import { useNavigate } from "react-router-dom";
 
 function UserNewAddress(props) {
@@ -31,6 +31,7 @@ function UserNewAddress(props) {
       console.log(err);
       alert(err.message);
       if (err.message === "signin again") {
+        dispatch(reset());
         navigate("/login");
       }
     }

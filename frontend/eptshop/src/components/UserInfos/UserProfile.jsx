@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import {
   fetchChangeUserProfile,
   fetchUserShortProfile,
+  reset,
 } from "../../slices/userSlice";
 import { CircularProgress } from "@mui/material";
 
@@ -63,6 +64,7 @@ function UserProfile() {
     } catch (err) {
       alert(err.message);
       if (err.message === "signin again") {
+        dispatch(reset());
         navigate("/login");
       }
     }
@@ -85,6 +87,7 @@ function UserProfile() {
       dispatch(fetchUserShortProfile(phoneNumber));
     } catch (err) {
       if (err.message === "signin again") {
+        dispatch(reset());
         navigate("/login");
       }
     }

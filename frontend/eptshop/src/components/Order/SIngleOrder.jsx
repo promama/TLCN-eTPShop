@@ -5,7 +5,7 @@ import { formatCurrency } from "../../utilities/formatCurrency";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchRatingProduct } from "../../slices/cartSlice";
-import { removeEmail } from "../../slices/userSlice";
+import { reset } from "../../slices/userSlice";
 
 function SIngleOrder(props) {
   const isLoading = useSelector((state) => state.user.isLoading);
@@ -29,7 +29,7 @@ function SIngleOrder(props) {
     } catch (err) {
       alert(err.message);
       if (err.message === "signin again") {
-        dispatch(removeEmail());
+        dispatch(reset());
         navigate("/login");
       }
     }

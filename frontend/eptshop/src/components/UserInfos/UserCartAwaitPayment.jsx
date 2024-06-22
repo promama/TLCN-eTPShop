@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, Container } from "react-bootstrap";
 import Order from "../Order/Order";
 import { CircularProgress } from "@mui/material";
+import { reset } from "../../slices/userSlice";
 
 function UserCartAwaitPayment() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ function UserCartAwaitPayment() {
       dispatch(showWaitingApproveOrder());
     } catch (err) {
       if (err.message === "signin again") {
+        dispatch(reset());
         navigate("/login");
       }
     }

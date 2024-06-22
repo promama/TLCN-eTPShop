@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import {
   fetchConfirmAndBuy,
   fetchGetAllAddress,
-  removeEmail,
   reset,
 } from "../../slices/userSlice";
 import ListAddress from "./ListAddress";
@@ -56,7 +55,7 @@ export function ShoppingCart() {
     } catch (err) {
       alert(err.message);
       if (err.message === "signin again") {
-        dispatch(removeEmail());
+        dispatch(reset());
         navigate("/login");
       }
     }

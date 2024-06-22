@@ -8,7 +8,7 @@ import Box from "@mui/system/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { changeSize, changeColor } from "../../slices/productsSlice";
-import { removeEmail } from "../../slices/userSlice";
+import { reset } from "../../slices/userSlice";
 import { formatCurrency } from "../../utilities/formatCurrency";
 import { CircularProgress } from "@mui/material";
 
@@ -103,7 +103,7 @@ function Product() {
     } catch (err) {
       alert(err.message);
       if (err.message === "signin again") {
-        dispatch(removeEmail());
+        dispatch(reset());
         navigate("/login");
       }
     }

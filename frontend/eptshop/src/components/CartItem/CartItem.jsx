@@ -3,9 +3,8 @@ import { formatCurrency } from "../../utilities/formatCurrency";
 import { Box, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCartFetch, subtractToCartFetch } from "../../slices/cartSlice";
-import { removeEmail, reset } from "../../slices/userSlice";
+import { reset } from "../../slices/userSlice";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 export function CartItem(props) {
   const dispatch = useDispatch();
@@ -26,7 +25,7 @@ export function CartItem(props) {
     } catch (err) {
       alert(err.message);
       if (err.message === "signin again") {
-        dispatch(removeEmail());
+        dispatch(reset());
         navigate("/login");
       }
     }
@@ -46,7 +45,7 @@ export function CartItem(props) {
     } catch (err) {
       alert(err.message);
       if (err.message === "signin again") {
-        dispatch(removeEmail());
+        dispatch(reset());
         navigate("/login");
       }
     }
@@ -66,7 +65,7 @@ export function CartItem(props) {
     } catch (err) {
       alert(err.message);
       if (err.message === "signin again") {
-        dispatch(removeEmail());
+        dispatch(reset());
         navigate("/login");
       }
     }

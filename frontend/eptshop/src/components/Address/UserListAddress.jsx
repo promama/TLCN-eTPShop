@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGetAllAddress } from "../../slices/userSlice";
-import { Col, Container, Row, Stack } from "react-bootstrap";
-import { Button, TextField } from "@mui/material";
-import { Box } from "@mui/system";
-import UserNewAddress from "./UserNewAddress";
+import { fetchGetAllAddress, reset } from "../../slices/userSlice";
 import UserSingleAddress from "./UserSingleAddress";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +20,7 @@ function UserListAddress(props) {
       console.log(err);
       if (message === "signin again") {
       }
+      dispatch(reset());
       navigate("/login");
     }
   }, [dispatch, navigate, message]);
@@ -33,6 +30,7 @@ function UserListAddress(props) {
       dispatch(fetchGetAllAddress());
     } catch (err) {
       if (err.message === "signin again") {
+        dispatch(reset());
         navigate("/login");
       }
     }
