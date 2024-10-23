@@ -15,6 +15,9 @@ const initialState = {
   isLoading: false,
 };
 
+//render address
+const base_url = "https://e-tpshop-backend.onrender.com";
+
 export const showCartItemsFetch = createAsyncThunk(
   "cart/showCartItems",
   async (productInfos, { rejectWithValue }) => {
@@ -24,7 +27,7 @@ export const showCartItemsFetch = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/cart/getCartItems`,
+        url: `${base_url}/cart/getCartItems`,
         data: { ...productInfos },
       });
       return res.data;
@@ -43,7 +46,7 @@ export const subtractToCartFetch = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/cart/subtractToCart`,
+        url: `${base_url}/cart/subtractToCart`,
         data: { ...productInfos },
       });
       return res.data;
@@ -62,7 +65,7 @@ export const addToCartFetch = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/cart/addToCart`,
+        url: `${base_url}/cart/addToCart`,
         data: { ...productInfos },
       });
       return res.data;
@@ -81,7 +84,7 @@ export const showAllOrder = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/cart/allOrder`,
+        url: `${base_url}/cart/allOrder`,
         data: { ...productInfos },
       });
       return res.data;
@@ -100,7 +103,7 @@ export const showWaitingApproveOrder = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/cart/waitingApproveOrder`,
+        url: `${base_url}/cart/waitingApproveOrder`,
         data: { ...productInfos },
       });
       return res.data;
@@ -119,7 +122,7 @@ export const showDeliveringOrder = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/cart/deliveringOrder`,
+        url: `${base_url}/cart/deliveringOrder`,
         data: { ...productInfos },
       });
       return res.data;
@@ -138,7 +141,7 @@ export const showFinishOrder = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/cart/finishOrder`,
+        url: `${base_url}/cart/finishOrder`,
         data: { ...productInfos },
       });
       return res.data;
@@ -157,7 +160,7 @@ export const fetchRatingProduct = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/rateProduct`,
+        url: `${base_url}/user/rateProduct`,
         data: { ...productInfos },
       });
       return res.data;

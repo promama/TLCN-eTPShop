@@ -31,6 +31,7 @@ function Product() {
   const [mainImage, setMainImage] = useState("");
   const [sizes, setSizes] = useState(size);
   const [num, setNum] = useState(1);
+  const [price, setPrice] = useState(product.price);
 
   function displayMainImage(url) {
     if (mainImage === "") {
@@ -73,6 +74,14 @@ function Product() {
 
   function handleBoxChange(e) {
     setSizes(e.target.value.toString());
+    productSizes.map((products) => {
+      if (
+        isMatchColor(products.productColor) &&
+        products.productSize.toString() === e.target.value.toString()
+      ) {
+        setPrice(products.price);
+      }
+    });
     //dispatch(changeSize(sizes));
   }
 
@@ -200,7 +209,7 @@ function Product() {
               <div className="col-md-6">
                 <h1 className="display-5 fw-bolder">{product.name}</h1>
                 <div className="fs-2 mb-2">
-                  <span>{formatCurrency(product.price)}</span>
+                  <span>{formatCurrency(price)}</span>
                 </div>
                 <div className="row d-flex">
                   {productColors.map((color) => (

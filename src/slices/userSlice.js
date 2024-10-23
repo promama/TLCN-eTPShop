@@ -16,6 +16,9 @@ const initialState = {
   isLoading: false,
 };
 
+//render address
+const base_url = "https://e-tpshop-backend.onrender.com";
+
 export const fetchVerify = createAsyncThunk(
   "user/fetchVerify",
   async (numb, { rejectWithValue }) => {
@@ -25,7 +28,7 @@ export const fetchVerify = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/verify`,
+        url: `${base_url}/user/verify`,
       });
       return res.data;
     } catch (err) {
@@ -43,7 +46,7 @@ export const fetchUserSetDefaultAddress = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/setUserDefaultAddress/${addressId}`,
+        url: `${base_url}/user/setUserDefaultAddress/${addressId}`,
       });
       return res.data;
     } catch (err) {
@@ -61,7 +64,7 @@ export const fetchUserDeleteAddress = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "DELETE",
-        url: `http://localhost:5000/user/deleteUserAddressById/${addressId}`,
+        url: `${base_url}/user/deleteUserAddressById/${addressId}`,
       });
       return res.data;
     } catch (err) {
@@ -79,7 +82,7 @@ export const fetchUserShortProfile = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "GET",
-        url: `http://localhost:5000/user/showUserShortProfile`,
+        url: `${base_url}/user/showUserShortProfile`,
       });
       return res.data;
     } catch (err) {
@@ -97,7 +100,7 @@ export const fetchChangeUserProfile = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/editUserProfile`,
+        url: `${base_url}/user/editUserProfile`,
         data: { ...userProfile },
       });
       return res.data;
@@ -116,7 +119,7 @@ export const fetchGetAllAddress = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/getAllAddress`,
+        url: `${base_url}/user/getAllAddress`,
       });
       return res.data;
     } catch (err) {
@@ -134,7 +137,7 @@ export const fetchAddNewAddress = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/createNewAddress`,
+        url: `${base_url}/user/createNewAddress`,
         data: { ...userInfos },
       });
       return res.data;
@@ -153,7 +156,7 @@ export const fetchAddress = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "GET",
-        url: `http://localhost:5000/user/getAllAddress`,
+        url: `${base_url}/user/getAllAddress`,
         data: { ...userInfos },
       });
       return res.data;
@@ -167,10 +170,7 @@ export const fetchLogin = createAsyncThunk(
   "user/fetchLogin",
   async (userInfos, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
-        "http://localhost:5000/user/login",
-        userInfos
-      );
+      const res = await axios.post(`${base_url}/user/login`, userInfos);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -182,10 +182,7 @@ export const fetchSignUp = createAsyncThunk(
   "user/fetchSignUp",
   async (userInfos, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
-        "http://localhost:5000/user/createUser",
-        userInfos
-      );
+      const res = await axios.post(`${base_url}/user/createUser`, userInfos);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -202,7 +199,7 @@ export const fetchConfirmAndBuy = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/confirmOder`,
+        url: `${base_url}/user/confirmOder`,
         data: data,
       });
       return res.data;
@@ -221,7 +218,7 @@ export const fetchFinishOrder = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/finishOrder`,
+        url: `${base_url}/user/finishOrder`,
         data: data,
       });
       return res.data;
@@ -240,7 +237,7 @@ export const fetchCancelOrder = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/cancelOrder`,
+        url: `${base_url}/user/cancelOrder`,
         data: data,
       });
       return res.data;
@@ -259,7 +256,7 @@ export const fetchChangePassword = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
-        url: `http://localhost:5000/user/changePassword`,
+        url: `${base_url}/user/changePassword`,
         data: data,
       });
       return res.data;

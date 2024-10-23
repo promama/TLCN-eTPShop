@@ -13,12 +13,15 @@ const initialState = {
   isLoading: false,
 };
 
+//render address
+const base_url = "https://e-tpshop-backend.onrender.com";
+
 export const productColorFetch = createAsyncThunk(
   "products/productColorFetch",
   async (productId) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/product/findColor/${productId.id}`
+        `${base_url}/product/findColor/${productId.id}`
       );
       return res.data;
     } catch (err) {
@@ -32,7 +35,7 @@ export const productsFetch = createAsyncThunk(
   "products/productsFetch",
   async () => {
     try {
-      const res = await axios.get("http://localhost:5000");
+      const res = await axios.get(`${base_url}`);
       console.log("entering productsSlice");
       return res.data;
     } catch (err) {
@@ -45,7 +48,7 @@ export const allProductsFetch = createAsyncThunk(
   "products/allProductsFetch",
   async () => {
     try {
-      const res = await axios.get("http://localhost:5000/product/getAll");
+      const res = await axios.get(`${base_url}/product/getAll`);
       return res.data;
     } catch (err) {
       console.log(err);
@@ -58,7 +61,7 @@ export const productFetch = createAsyncThunk(
   async (productId) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/product/findProduct/${productId.id}`
+        `${base_url}/product/findProduct/${productId.id}`
       );
       return res.data;
     } catch (err) {
