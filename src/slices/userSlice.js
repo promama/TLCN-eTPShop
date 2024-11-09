@@ -266,6 +266,21 @@ export const fetchChangePassword = createAsyncThunk(
   }
 );
 
+export const fetchTestUser = createAsyncThunk(
+  "user/fetchTestUser",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        method: "GET",
+        url: `${base_url}/user`,
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -515,6 +530,19 @@ const userSlice = createSlice({
     builder.addCase(fetchChangePassword.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
+    });
+
+    //testing
+    builder.addCase(fetchTestUser.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchTestUser.fulfilled, (state, action) => {
+      state.status = "success";
+      state.isLoading = false;
+    });
+    builder.addCase(fetchTestUser.rejected, (state, action) => {
+      state.status = "fail";
       state.isLoading = false;
     });
   },

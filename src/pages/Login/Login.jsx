@@ -14,9 +14,15 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { fetchLogin } from "../../slices/userSlice";
+import { cartListItem } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 
-import { cartListItem } from "../../slices/cartSlice";
+import { gapi } from "gapi-script";
+import { useEffect } from "react";
+import MyGoogleLogin from "../../components/Googles/MyGoogleLogin";
+
+const clientId =
+  "679762798993-no2af9mhhgofk87c36scuea6jnraarca.apps.googleusercontent.com";
 
 function Copyright(props) {
   return (
@@ -74,6 +80,17 @@ export default function SignIn() {
       alert(err.message);
     }
   };
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: clientId,
+        scope: "",
+      });
+    }
+
+    gapi.load("client:auth2", start);
+  });
 
   return (
     <>
@@ -146,6 +163,7 @@ export default function SignIn() {
               </Grid>
             </Box>
           </Box>
+          <MyGoogleLogin />
           <Copyright sx={{ mt: 8, mb: 4 }} />
         </Container>
       </ThemeProvider>
