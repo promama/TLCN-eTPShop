@@ -9,12 +9,23 @@ import {
 } from "../../slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
+import { useEffect, useRef } from "react";
+
+import socketIOClient from "socket.io-client";
+import { setNotificaition } from "../../slices/userSlice";
 
 function Order(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const socketRef = useRef();
 
   const isLoading = useSelector((state) => state.user.isLoading);
+  const email = useSelector((state) => state.user.email);
+
+  //connect to socket server
+  useEffect(() => {
+    socketRef.current = socketIOClient.connect("http://localhost:5001");
+  });
 
   function checkStatus(status) {
     if (status === "In cart") {
@@ -60,6 +71,12 @@ function Order(props) {
         fetchFinishOrder({ orderId: props.orders.orderId })
       ).unwrap();
       alert(res.message);
+
+      socketRef.current.emit("user:finish-order", {
+        message: "user finishing order",
+        email: email,
+        orderId: props.orders,
+      });
     } catch (err) {
       if (err.message === "signin again") {
         dispatch(reset());

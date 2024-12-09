@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,6 +17,8 @@ import {
 import ListAddress from "./ListAddress";
 import { CircularProgress } from "@mui/material";
 
+import socketIOClient from "socket.io-client";
+
 export function ShoppingCart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,6 +29,9 @@ export function ShoppingCart() {
   const orderId = useSelector((state) => state.cart.orderId);
   const addressInfos = useSelector((state) => state.user.addressInfos);
   const isLoading = useSelector((state) => state.user.isLoading);
+
+  const socketRef = useRef();
+  const email = useSelector((state) => state.user.email);
 
   function haveCartItems(item) {
     if (item) return true;
@@ -45,11 +50,20 @@ export function ShoppingCart() {
     }
   }, [dispatch, navigate]);
 
+  useEffect(() => {
+    socketRef.current = socketIOClient.connect("http://localhost:5001");
+  });
+
   const handleConfirmAndBuy = async (e) => {
     try {
       const res = await dispatch(
         fetchConfirmAndBuy({ orderId, addressInfos })
       ).unwrap();
+      await socketRef.current.emit("user:confirm-order", {
+        message: "confirm and buy",
+        email: email,
+        orderId: orderId,
+      });
       alert(res.message);
       dispatch(dropCart());
     } catch (err) {

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { productsFetch, allProductsFetch } from "../../slices/productsSlice";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 
@@ -8,11 +8,15 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import { formatCurrency } from "../../utilities/formatCurrency";
 import { CircularProgress, Rating, TextField } from "@mui/material";
 
+import socketIOClient from "socket.io-client";
+import { setNotificaition } from "../../slices/userSlice";
+
 function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const products = useSelector((state) => state.products.items);
   const isLoading = useSelector((state) => state.products.isLoading);
+  const email = useSelector((state) => state.user.email);
   //const [productId, setProductId] = useState(0);
 
   const [query, setQuery] = useState("");
@@ -32,6 +36,63 @@ function Home() {
       return item.name.toLowerCase().includes(query.toLowerCase());
     });
   }, [products, query]);
+
+  const [responseMessage, setResponseMessage] = useState("Waiting Response");
+  const socketRef = useRef();
+
+  useEffect(() => {
+    socketRef.current = socketIOClient.connect("http://localhost:5001");
+    try {
+      //user join a room
+      socketRef.current.emit("user:join", {
+        room: email,
+      });
+
+      // //confirming order
+      // socketRef.current.on("server:confirmed-order", (message) => {
+      //   console.log(message);
+      //   dispatch(setNotificaition(message.notify));
+      // });
+
+      // //listen to manager confirm order change status to delivering
+      // socketRef.current.on("server:manager-approved-order", (message) => {
+      //   console.log(message);
+      //   dispatch(setNotificaition(message.notify));
+      // });
+
+      // //finish order
+      // socketRef.current.on("server:finish-order", (message) => {
+      //   console.log(message);
+      //   dispatch(setNotificaition(message.notify));
+      // });
+
+      //testing space
+      // socketRef.current.emit("user:verify", {
+      //   socketId: socketRef.current.id,
+      //   token: localStorage.getItem("access_token"),
+      // });
+      // socketRef.current.on("server saying: ", (message) => {
+      //   setResponseMessage(message);
+      // });
+      //console.log(socketRef.current);
+      socketRef.current.on("server:acceptjoin", (message) => {
+        setResponseMessage(message.message);
+      });
+    } catch {}
+  }, [email, dispatch]);
+
+  // function submitSendMessage() {
+  //   //send message to server
+  //   console.log("current socket id is: " + socketRef.current.id);
+  //   socketRef.current.emit("chat message", {
+  //     message: "call you from client",
+  //     socketId: socketRef.current.id,
+  //   });
+  // }
+
+  // function handleJoinRoom() {
+  //   socketRef.current.emit("user:send-to-room", { message: "hey" });
+  // }
 
   return (
     <>

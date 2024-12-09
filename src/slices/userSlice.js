@@ -14,6 +14,8 @@ const initialState = {
   addressInfos: {},
   show: 0,
   isLoading: false,
+  notificationList: [],
+  unreadNotify: 0,
 };
 
 //render address
@@ -266,6 +268,22 @@ export const fetchChangePassword = createAsyncThunk(
   }
 );
 
+export const fetchUnreadNotification = createAsyncThunk(
+  "/user/fetchUnreadNotification",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        method: "POST",
+        url: `${base_url}/user/notification`,
+        data: data,
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const fetchTestUser = createAsyncThunk(
   "user/fetchTestUser",
   async (data, { rejectWithValue }) => {
@@ -310,6 +328,10 @@ const userSlice = createSlice({
     setShowPage: (state, action) => {
       state.show = action.payload;
     },
+    setNotificaition: (state, action) => {
+      state.notificationList = action.payload.notify;
+      state.unreadNotify = action.payload.userUnreadNoti;
+    },
   },
   extraReducers: (builder) => {
     //create new user account
@@ -339,6 +361,7 @@ const userSlice = createSlice({
       state.gender = action.payload.gender;
       state.dob = action.payload.birthDay;
       state.isLoading = false;
+      state.notificationList = action.payload.notify;
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {
       state.status = "fail";
@@ -533,6 +556,12 @@ const userSlice = createSlice({
       state.isLoading = false;
     });
 
+    //fetch unread notification
+    builder.addCase(fetchUnreadNotification.fulfilled, (state, action) => {
+      state.status = "success";
+      state.notificationList = action.payload.listNotification;
+      state.unreadNotify = action.payload.unreadNoti;
+    });
     //testing
     builder.addCase(fetchTestUser.pending, (state, action) => {
       state.isLoading = true;
@@ -548,7 +577,12 @@ const userSlice = createSlice({
   },
 });
 
-export const { removeEmail, reset, setOrderAddress, setShowPage } =
-  userSlice.actions;
+export const {
+  removeEmail,
+  reset,
+  setOrderAddress,
+  setShowPage,
+  setNotificaition,
+} = userSlice.actions;
 
 export default userSlice.reducer;
