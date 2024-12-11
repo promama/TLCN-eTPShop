@@ -40,46 +40,46 @@ function Home() {
   const [responseMessage, setResponseMessage] = useState("Waiting Response");
   const socketRef = useRef();
 
-  useEffect(() => {
-    socketRef.current = socketIOClient.connect("http://localhost:5001");
-    try {
-      //user join a room
-      socketRef.current.emit("user:join", {
-        room: email,
-      });
+  // useEffect(() => {
+  //   socketRef.current = socketIOClient.connect("http://localhost:5001");
+  //   try {
+  //     //user join a room
+  //     socketRef.current.emit("user:join", {
+  //       room: email,
+  //     });
 
-      // //confirming order
-      // socketRef.current.on("server:confirmed-order", (message) => {
-      //   console.log(message);
-      //   dispatch(setNotificaition(message.notify));
-      // });
+  //     // //confirming order
+  //     // socketRef.current.on("server:confirmed-order", (message) => {
+  //     //   console.log(message);
+  //     //   dispatch(setNotificaition(message.notify));
+  //     // });
 
-      // //listen to manager confirm order change status to delivering
-      // socketRef.current.on("server:manager-approved-order", (message) => {
-      //   console.log(message);
-      //   dispatch(setNotificaition(message.notify));
-      // });
+  //     // //listen to manager confirm order change status to delivering
+  //     // socketRef.current.on("server:manager-approved-order", (message) => {
+  //     //   console.log(message);
+  //     //   dispatch(setNotificaition(message.notify));
+  //     // });
 
-      // //finish order
-      // socketRef.current.on("server:finish-order", (message) => {
-      //   console.log(message);
-      //   dispatch(setNotificaition(message.notify));
-      // });
+  //     // //finish order
+  //     // socketRef.current.on("server:finish-order", (message) => {
+  //     //   console.log(message);
+  //     //   dispatch(setNotificaition(message.notify));
+  //     // });
 
-      //testing space
-      // socketRef.current.emit("user:verify", {
-      //   socketId: socketRef.current.id,
-      //   token: localStorage.getItem("access_token"),
-      // });
-      // socketRef.current.on("server saying: ", (message) => {
-      //   setResponseMessage(message);
-      // });
-      //console.log(socketRef.current);
-      socketRef.current.on("server:acceptjoin", (message) => {
-        setResponseMessage(message.message);
-      });
-    } catch {}
-  }, [email, dispatch]);
+  //     //testing space
+  //     // socketRef.current.emit("user:verify", {
+  //     //   socketId: socketRef.current.id,
+  //     //   token: localStorage.getItem("access_token"),
+  //     // });
+  //     // socketRef.current.on("server saying: ", (message) => {
+  //     //   setResponseMessage(message);
+  //     // });
+  //     //console.log(socketRef.current);
+  //     socketRef.current.on("server:acceptjoin", (message) => {
+  //       setResponseMessage(message.message);
+  //     });
+  //   } catch {}
+  // }, [email, dispatch]);
 
   // function submitSendMessage() {
   //   //send message to server
