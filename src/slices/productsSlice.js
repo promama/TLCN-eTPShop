@@ -14,7 +14,8 @@ const initialState = {
 };
 
 //render address
-const base_url = "https://e-tpshop-backend.onrender.com";
+// const base_url = "https://e-tpshop-backend.onrender.com";
+const base_url = "http://localhost:5000";
 
 export const productColorFetch = createAsyncThunk(
   "products/productColorFetch",

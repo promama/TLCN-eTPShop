@@ -16,7 +16,8 @@ const initialState = {
 };
 
 //render address
-const base_url = "https://e-tpshop-backend.onrender.com";
+// const base_url = "https://e-tpshop-backend.onrender.com";
+const base_url = "http://localhost:5000";
 
 export const showCartItemsFetch = createAsyncThunk(
   "cart/showCartItems",
@@ -28,7 +29,7 @@ export const showCartItemsFetch = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/cart/getCartItems`,
-        data: { ...productInfos },
+        data: { email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -47,7 +48,7 @@ export const subtractToCartFetch = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/cart/subtractToCart`,
-        data: { ...productInfos },
+        data: { ...productInfos, email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -66,7 +67,7 @@ export const addToCartFetch = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/cart/addToCart`,
-        data: { ...productInfos },
+        data: { ...productInfos, email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -85,7 +86,7 @@ export const showAllOrder = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/cart/allOrder`,
-        data: { ...productInfos },
+        data: { email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -104,7 +105,7 @@ export const showWaitingApproveOrder = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/cart/waitingApproveOrder`,
-        data: { ...productInfos },
+        data: { email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -123,7 +124,7 @@ export const showDeliveringOrder = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/cart/deliveringOrder`,
-        data: { ...productInfos },
+        data: { ...productInfos, email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -142,7 +143,7 @@ export const showFinishOrder = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/cart/finishOrder`,
-        data: { ...productInfos },
+        data: { ...productInfos, email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -161,7 +162,7 @@ export const fetchRatingProduct = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/user/rateProduct`,
-        data: { ...productInfos },
+        data: { ...productInfos, email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -245,7 +246,7 @@ const cartSlice = createSlice({
     });
     builder.addCase(showCartItemsFetch.rejected, (state, action) => {
       state.status = "fail";
-      state.message = action.payload.message;
+      state.message = action.payload?.message;
     });
     //show all orders
     builder.addCase(showAllOrder.pending, (state, action) => {

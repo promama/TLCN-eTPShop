@@ -10,7 +10,7 @@ function PrivateRoutes() {
 
   useEffect(() => {
     try {
-      dispatch(fetchVerify());
+      dispatch(fetchVerify()).unwrap();
     } catch (err) {
       dispatch(reset());
       navigate("/signin");

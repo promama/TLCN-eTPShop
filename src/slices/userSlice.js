@@ -19,7 +19,8 @@ const initialState = {
 };
 
 //render address
-const base_url = "https://e-tpshop-backend.onrender.com";
+// const base_url = "https://e-tpshop-backend.onrender.com";
+const base_url = "http://localhost:5000";
 
 export const fetchVerify = createAsyncThunk(
   "user/fetchVerify",
@@ -30,6 +31,7 @@ export const fetchVerify = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
+        data: { email: localStorage.getItem("email") },
         url: `${base_url}/user/verify`,
       });
       return res.data;
@@ -48,6 +50,7 @@ export const fetchUserSetDefaultAddress = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
+        data: { email: localStorage.getItem("email") },
         url: `${base_url}/user/setUserDefaultAddress/${addressId}`,
       });
       return res.data;
@@ -66,6 +69,7 @@ export const fetchUserDeleteAddress = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "DELETE",
+        data: { email: localStorage.getItem("email") },
         url: `${base_url}/user/deleteUserAddressById/${addressId}`,
       });
       return res.data;
@@ -83,7 +87,8 @@ export const fetchUserShortProfile = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
-        method: "GET",
+        method: "POST",
+        data: { email: localStorage.getItem("email") },
         url: `${base_url}/user/showUserShortProfile`,
       });
       return res.data;
@@ -103,7 +108,7 @@ export const fetchChangeUserProfile = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/user/editUserProfile`,
-        data: { ...userProfile },
+        data: { ...userProfile, email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -121,6 +126,7 @@ export const fetchGetAllAddress = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
         method: "POST",
+        data: { email: localStorage.getItem("email") },
         url: `${base_url}/user/getAllAddress`,
       });
       return res.data;
@@ -140,26 +146,7 @@ export const fetchAddNewAddress = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/user/createNewAddress`,
-        data: { ...userInfos },
-      });
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-
-export const fetchAddress = createAsyncThunk(
-  "user/fetchAddress",
-  async (userInfos, { rejectWithValue }) => {
-    try {
-      const res = await axios.request({
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-        method: "GET",
-        url: `${base_url}/user/getAllAddress`,
-        data: { ...userInfos },
+        data: { ...userInfos, email: localStorage.getItem("email") },
       });
       return res.data;
     } catch (err) {
@@ -273,6 +260,9 @@ export const fetchUnreadNotification = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
         method: "POST",
         url: `${base_url}/user/notification`,
         data: data,
@@ -313,6 +303,8 @@ const userSlice = createSlice({
       state.dob = "";
       state.addresses = [];
       state.allowAccess = true;
+      state.notificationList = [];
+      state.unreadNotify = 0;
       localStorage.clear();
     },
     removeEmail: (state, action) => {
@@ -368,17 +360,6 @@ const userSlice = createSlice({
       state.message = action.payload.message;
       state.isLoading = false;
     });
-    //find user addresses
-    builder.addCase(fetchAddress.fulfilled, (state, action) => {
-      state.addresses = action.payload.address;
-      state.status = "success";
-      state.token = action.payload.token;
-      localStorage.setItem("access_token", action.payload.token);
-    });
-    builder.addCase(fetchAddress.rejected, (state, action) => {
-      state.status = "fail";
-      state.message = action.payload.message;
-    });
     //add new user address
     builder.addCase(fetchAddNewAddress.pending, (state, action) => {
       state.isLoading = true;
@@ -404,7 +385,7 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchGetAllAddress.rejected, (state, action) => {
       state.status = "fail";
-      state.message = action.payload.message;
+      state.message = action.payload?.message;
     });
     //change user profile
     builder.addCase(fetchChangeUserProfile.pending, (state, action) => {
@@ -437,7 +418,7 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchUserShortProfile.rejected, (state, action) => {
       state.status = "fail";
-      state.message = action.payload.message;
+      state.message = action.payload?.message;
     });
     //delete address
     builder.addCase(fetchUserDeleteAddress.pending, (state, action) => {
@@ -487,8 +468,8 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchVerify.rejected, (state, action) => {
       state.status = "fail";
-      state.message = action.payload.message;
-      state.allowAccess = action.payload.success;
+      state.message = action.payload?.message;
+      state.allowAccess = false;
     });
     //confirm oder
     builder.addCase(fetchConfirmAndBuy.pending, (state, action) => {

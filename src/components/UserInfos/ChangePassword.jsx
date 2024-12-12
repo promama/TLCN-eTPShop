@@ -8,6 +8,7 @@ import { fetchChangePassword, reset } from "../../slices/userSlice";
 
 function ChangePassword() {
   const isLoading = useSelector((state) => state.user.isLoading);
+  const email = useSelector((state) => state.user.email);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -43,7 +44,7 @@ function ChangePassword() {
       //dispatch
       try {
         const res = await dispatch(
-          fetchChangePassword({ password, newPassword, reNewPassword })
+          fetchChangePassword({ password, newPassword, reNewPassword, email })
         ).unwrap();
         alert(res.message);
       } catch (err) {

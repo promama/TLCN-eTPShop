@@ -52,7 +52,7 @@ function Order(props) {
   const handleCancelOrder = async () => {
     try {
       const res = await dispatch(
-        fetchCancelOrder({ orderId: props.orders.orderId })
+        fetchCancelOrder({ orderId: props.orders.orderId, email })
       ).unwrap();
       alert(res.message);
     } catch (err) {
@@ -68,7 +68,7 @@ function Order(props) {
   const handleFinishOrder = async () => {
     try {
       const res = await dispatch(
-        fetchFinishOrder({ orderId: props.orders.orderId })
+        fetchFinishOrder({ orderId: props.orders.orderId, email })
       ).unwrap();
       alert(res.message);
 

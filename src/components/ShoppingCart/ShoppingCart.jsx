@@ -57,7 +57,7 @@ export function ShoppingCart() {
   const handleConfirmAndBuy = async (e) => {
     try {
       const res = await dispatch(
-        fetchConfirmAndBuy({ orderId, addressInfos })
+        fetchConfirmAndBuy({ orderId, addressInfos, email })
       ).unwrap();
       await socketRef.current.emit("user:confirm-order", {
         message: "confirm and buy",
