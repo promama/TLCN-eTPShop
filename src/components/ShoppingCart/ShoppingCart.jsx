@@ -83,7 +83,7 @@ export function ShoppingCart() {
       style={{ width: "50%", background: "light" }}
     >
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Cart id: {orderId}</Offcanvas.Title>
+        <Offcanvas.Title>Your products in cart</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
         <Stack gap={3}>

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { productsFetch, allProductsFetch } from "../../slices/productsSlice";
+import { allProductsFetch } from "../../slices/productsSlice";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";

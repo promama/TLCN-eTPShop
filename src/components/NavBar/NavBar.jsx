@@ -96,7 +96,7 @@ const NavBar = () => {
       dispatch(setNotificaition(message));
       alert(message.message);
     });
-  });
+  }, [dispatch, email]);
 
   function navigateToProfilePage() {
     navigate("/profile");

@@ -34,6 +34,8 @@ function UserProfile() {
 
   const [value, setValue] = useState(gender);
   const [date, setDate] = useState(dayjs(dob)); //took day from db
+  const [number, setNumber] = useState(phoneNumber);
+
   const [enableEdit, setEnableEdit] = useState(true);
 
   const handleSubmit = async (event) => {
@@ -85,6 +87,9 @@ function UserProfile() {
   useEffect(() => {
     try {
       dispatch(fetchUserShortProfile(phoneNumber));
+      setDate(dob);
+      setNumber(phoneNumber);
+      setValue(gender);
     } catch (err) {
       if (err.message === "signin again") {
         dispatch(reset());
@@ -92,7 +97,7 @@ function UserProfile() {
       }
     }
     console.log(phoneNumber);
-  }, [dispatch, phoneNumber, navigate]);
+  }, [dispatch, phoneNumber, navigate, dob, gender]);
 
   return (
     <Card>
@@ -121,7 +126,7 @@ function UserProfile() {
                     id={phoneNumber}
                     autoComplete="phone"
                     sx={{ marginBottom: 2 }}
-                    defaultValue={phoneNumber}
+                    defaultValue={number}
                     disabled={enableEdit}
                   />
                 </Col>
@@ -157,7 +162,7 @@ function UserProfile() {
                     <DatePicker
                       label="Date of birth"
                       format="DD/MM/YYYY"
-                      value={date}
+                      value={dayjs(date)}
                       onChange={(newDate) => setDate(newDate)}
                       disabled={enableEdit}
                     />

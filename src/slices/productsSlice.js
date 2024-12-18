@@ -9,6 +9,7 @@ const initialState = {
   item_Props: [],
   color: "",
   size: "",
+  price: 0,
   productSizes: [],
   isLoading: false,
 };
@@ -102,6 +103,7 @@ const productsSlice = createSlice({
       state.status = "success";
       state.singleItem = action.payload.product[0];
       state.color = action.payload.color;
+      state.price = action.payload.base_price;
     });
     builder.addCase(productColorFetch.fulfilled, (state, action) => {
       state.status = "success";

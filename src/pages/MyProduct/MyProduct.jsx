@@ -18,6 +18,7 @@ function Product() {
   const navigate = useNavigate();
 
   const product = useSelector((state) => state.products.singleItem);
+  const base_price = useSelector((state) => state.products.price);
   const baseColor = useSelector((state) => state.products.color);
   const productColors = useSelector((state) => state.products.item_Props);
   const productSizes = useSelector((state) => state.products.productSizes);
@@ -32,6 +33,7 @@ function Product() {
   const [sizes, setSizes] = useState(size);
   const [num, setNum] = useState(1);
   const [price, setPrice] = useState(product.price);
+  const [stock, setStock] = useState(0);
 
   function displayMainImage(url) {
     if (mainImage === "") {
@@ -68,18 +70,28 @@ function Product() {
   function handleChange(e) {
     const regex = /(?<!-)(?<!\d)[1-9][0-9]*/;
     if (e.target.value === "" || regex.test(e.target.value)) {
-      setNum(e.target.value);
+      if (e.target.value > 0 && e.target.value <= stock) {
+        setNum(e.target.value);
+      } else if (e.target.value < 1) {
+        alert("quantity must be 1 or higher");
+        setNum(1);
+      } else {
+        alert("quantity must be less than " + stock);
+        setNum(stock);
+      }
     }
   }
 
   function handleBoxChange(e) {
     setSizes(e.target.value.toString());
+    setNum(1);
     productSizes.map((products) => {
       if (
         isMatchColor(products.productColor) &&
         products.productSize.toString() === e.target.value.toString()
       ) {
         setPrice(products.price);
+        setStock(products.quantity);
       }
     });
     //dispatch(changeSize(sizes));
@@ -120,8 +132,9 @@ function Product() {
 
   useEffect(() => {
     dispatch(productFetch(params));
+    setPrice(product.price);
     dispatch(productColorFetch(params));
-  }, [dispatch, params]);
+  }, [dispatch, params, product.price]);
 
   useEffect(() => {
     dispatch(changeSize(sizes));
@@ -211,6 +224,7 @@ function Product() {
                 <div className="fs-2 mb-2">
                   <span>{formatCurrency(price)}</span>
                 </div>
+                <div className="fs-2 mb-2">stock: {stock}</div>
                 <div className="row d-flex">
                   {productColors.map((color) => (
                     <div className="col-sm-2 mb-2" key={color.productColor}>
@@ -287,7 +301,11 @@ function Product() {
                               variant="outlined"
                               sx={{ height: 40 }}
                               onClick={() => {
-                                setNum(parseInt(num, 10) + 1);
+                                if (num >= stock) {
+                                  alert("can't add more!");
+                                } else {
+                                  setNum(parseInt(num, 10) + 1);
+                                }
                               }}
                             >
                               +
